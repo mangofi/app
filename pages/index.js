@@ -9,7 +9,7 @@ export default function Home() {
         <Navbar />
       </header>
       <main>
-        Content
+        Content 2
       </main>
     </div>
   )
