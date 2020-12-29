@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import Link from 'next/link'
 
 export const Container = styled.div`
   display: flex;
@@ -30,14 +31,14 @@ export const Menu = styled.ul`
 
 export const MenuItem = styled.li`
   margin: 0 10px;
-`
 
-export const MenuLink = styled.a`
-  text-decoration: none;
-  
   &:hover {
     color: orange;
   }
+`
+
+export const MenuLink = styled(Link)`
+  text-decoration: none;
 `
 
 export const AccountContainer = styled.div`

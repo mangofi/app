@@ -15,10 +15,10 @@ export default function Navbar() {
       <Styles.MenuContainer>
         <Styles.Menu>
           <Styles.MenuItem>
-            <Styles.MenuLink href="#">Farms</Styles.MenuLink>
+            <Styles.MenuLink href="/farms">Farms</Styles.MenuLink>
           </Styles.MenuItem>
           <Styles.MenuItem>
-            <Styles.MenuLink href="#">Stake</Styles.MenuLink>
+            <Styles.MenuLink href="/stake">Stake</Styles.MenuLink>
           </Styles.MenuItem>
         </Styles.Menu>
       </Styles.MenuContainer>

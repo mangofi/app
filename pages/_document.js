@@ -31,7 +31,11 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html>
-        <Head>{this.props.styles}</Head>
+        <Head>
+          <title>MangoFi - The new flavor of DeFi</title>
+          <link rel="icon" href="/favicon.ico" />
+          {this.props.styles}
+        </Head>
         <body>
           <Main />
           <NextScript />

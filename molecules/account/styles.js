@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: row;
 `
 
-export const Address = styled.button`
+export const Address = styled.a`
   background: none;
   border: 1px solid #888;
   border-radius: 6px;
