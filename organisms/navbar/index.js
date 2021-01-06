@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Account from "../../molecules/account"
+import ConnectButton from "../../molecules/connect-button"
 
 import * as Styles from './styles'
 
@@ -15,15 +15,12 @@ export default function Navbar() {
       <Styles.MenuContainer>
         <Styles.Menu>
           <Styles.MenuItem>
-            <Styles.MenuLink href="/farms">Farms</Styles.MenuLink>
-          </Styles.MenuItem>
-          <Styles.MenuItem>
             <Styles.MenuLink href="/stake">Stake</Styles.MenuLink>
           </Styles.MenuItem>
         </Styles.Menu>
       </Styles.MenuContainer>
       <Styles.AccountContainer>
-        <Account />
+        <ConnectButton />
       </Styles.AccountContainer>
     </Styles.Container>
   )

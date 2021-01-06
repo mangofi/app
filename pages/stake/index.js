@@ -2,9 +2,7 @@ import React from 'react'
 
 import Navbar from "../../organisms/navbar"
 
-// import * as Styles from './styles'
-
-export default ({}) => {
+export default function Stake() {
   return (
     <div>
       <header>
