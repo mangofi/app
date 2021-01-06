@@ -13,7 +13,6 @@ function ConnectButton({ wallet, walletActions }) {
   const {
     setAccount
   } = walletActions
-  // const [address, setAddress] = useState(null);
 
   const loadWeb3 = async () => {
     if (window.ethereum) {
