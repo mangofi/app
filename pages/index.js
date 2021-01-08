@@ -4,8 +4,6 @@ import { Container, Row, Col } from "react-bootstrap"
 import Navbar from "../organisms/navbar"
 import StakedBalance from "../organisms/staked-balance"
 
-// import * as Styles from "./styles"
-
 export default function Home() {
   return (
     <Container fluid>
