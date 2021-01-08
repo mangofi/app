@@ -10,6 +10,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
     "bootstrap": "^4.5.3",
+    "dotenv": "^8.2.0",
     "next": "10.0.3",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.0",
@@ -18,6 +19,7 @@
     "redux-devtools": "^3.7.0",
     "styled-components": "^5.2.1",
     "truffle": "^5.1.59",
+    "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.3.1"
   }
 }

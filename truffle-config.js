@@ -1,3 +1,6 @@
+require('dotenv').config();
+const HDWalletProvider = require("truffle-hdwallet-provider");
+
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -66,6 +69,10 @@ module.exports = {
     // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
+    "ropsten-infura": {
+			provider: () => new HDWalletProvider(process.env.TEST_MNEMONIC, "https://ropsten.infura.io/v3/"+process.env.INFURA_KEY, 0),
+			network_id: 3
+		}
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
