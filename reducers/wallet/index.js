@@ -9,7 +9,8 @@ export default function Web3(state = initialState, action) {
     case SET_ACCOUNT:
       return {
         ...state,
-        account: action.payload.account
+        account: action.payload.account,
+        signedIn: action.payload.signedIn
       }
       break;
     default:

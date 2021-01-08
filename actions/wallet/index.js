@@ -7,7 +7,8 @@ export function setAccount(address) {
     dispatch({
       type: SET_ACCOUNT,
       payload: {
-        account: address
+        account: address,
+        signedIn: !!address
       }
     })
   }

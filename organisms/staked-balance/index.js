@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 
 import MangoToken from '../../abis/MangoToken'
 
+import Amount from "../../molecules/amount"
+
 import connector from "../../lib/connector"
 
 import * as Styles from './styles'
 
 function StakedBalance({ wallet }) {
+  const isBrowser = (typeof window !== "undefined");
   const [balance, setBalance] = useState(0)
 
   const loadData = async () => {
@@ -19,15 +22,30 @@ function StakedBalance({ wallet }) {
     }
   }
   
-  useEffect(async () => {
-    await loadData()
-  }, [])
+  const convertedBalance = () => {
+    if (isBrowser && wallet.signedIn) {
+      return window.web3.utils.fromWei(balance.toString(), 'Ether')
+    }
+    
+    return balance
+  }
   
-  const convertedBalance = window.web3.utils.fromWei(balance.toString(), 'Ether')
+  useEffect(async () => {
+    if (wallet.account) {
+      await loadData()
+    } else {
+      setBalance(0)
+    }
+  }, [wallet.account, wallet.signedIn])
 
   return (
     <Styles.Container>
-      Available MNGO Balance: {convertedBalance} MNGO
+      <Styles.Title>
+        Available MNGO Balance
+      </Styles.Title>
+      <Styles.Content>
+        <Amount>{convertedBalance()}</Amount>
+      </Styles.Content>
     </Styles.Container>
   )
 }

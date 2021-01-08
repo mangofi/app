@@ -46,8 +46,10 @@ function ConnectButton({ wallet, walletActions }) {
   
   useEffect(async () => {
     await loadWeb3()
-    await setupAccount()
   }, [])
+  useEffect(async () => {
+    await setupAccount()
+  }, [wallet.account])
 
   return (
     <Styles.Container>
