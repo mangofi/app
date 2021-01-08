@@ -1,10 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import Web3 from 'web3'
 
+import connector from '../../lib/connector'
+
 import * as Styles from './styles'
 
-export default () => {
-  const [address, setAddress] = useState(null);
+function ConnectButton({ wallet, walletActions }) {
+  const {
+    account,
+    signedIn
+  } = wallet
+  const {
+    setAccount
+  } = walletActions
 
   const loadWeb3 = async () => {
     if (window.ethereum) {
@@ -24,7 +32,7 @@ export default () => {
   }
   
   const setupAccount = async () => {
-    if (address) {
+    if (signedIn) {
       return
     }
 
@@ -32,20 +40,22 @@ export default () => {
     const accounts = await web3.eth.getAccounts()
     
     if (accounts) {
-      setAddress(accounts[0])
+      setAccount(accounts[0])
     }
   }
   
   useEffect(async () => {
     await loadWeb3()
-    await setupAccount()
   }, [])
+  useEffect(async () => {
+    await setupAccount()
+  }, [wallet.account])
 
   return (
     <Styles.Container>
-      {address ? (
-        <Styles.Address href={`https://etherscan.io/address/${address}`} target='new' title={address}>
-          {address.slice(0, 5)}…{address.slice(-4)}
+      {account ? (
+        <Styles.Address href={`https://etherscan.io/address/${account}`} target='new' title={account}>
+          {account.slice(0, 5)}…{account.slice(-4)}
         </Styles.Address>
       ) : (
         <Styles.ConnectBtn onClick={onConnect}>
@@ -55,3 +65,5 @@ export default () => {
     </Styles.Container>
   )
 }
+
+export default connector(['wallet'], ['wallet'])(ConnectButton)

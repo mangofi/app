@@ -1,0 +1,1 @@
+export const SET_ACCOUNT = 'WALLET.SET_ACCOUNT'
