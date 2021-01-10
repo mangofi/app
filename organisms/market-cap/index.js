@@ -63,7 +63,7 @@ function MarketCap({ wallet }) {
           Market Cap
         </Card.Title>
         <Card.Text>
-          <Amount currency='USD'>{marketCap ? asMoney(marketCap) : "--"}</Amount>
+          <Amount currency='USD'>{marketCap ? asMoney(marketCap, {precision: 0}) : "--"}</Amount>
         </Card.Text>
       </Card.Body>
       <Card.Footer>
