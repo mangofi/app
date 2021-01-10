@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "deploy:ropsten": "truffle deploy --network ropsten-infura --reset"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
+    "accounting-js": "^1.1.1",
     "bootstrap": "^4.5.3",
+    "coingecko-api": "^1.0.10",
     "dotenv": "^8.2.0",
     "next": "10.0.3",
     "react": "17.0.1",

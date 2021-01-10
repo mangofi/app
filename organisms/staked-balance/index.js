@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { Card } from "react-bootstrap"
 
 import MangoToken from '../../abis/MangoToken'
-
 import Amount from "../../molecules/amount"
-
 import connector from "../../lib/connector"
+import {asNumber} from "../../lib/number"
 
 import * as Styles from './styles'
 
@@ -39,14 +39,16 @@ function StakedBalance({ wallet }) {
   }, [wallet.account, wallet.signedIn])
 
   return (
-    <Styles.Container>
-      <Styles.Title>
-        Available MNGO Balance
-      </Styles.Title>
-      <Styles.Content>
-        <Amount>{convertedBalance()}</Amount>
-      </Styles.Content>
-    </Styles.Container>
+    <Card>
+      <Card.Body>
+        <Card.Title>
+          Available MNGO Balance
+        </Card.Title>
+        <Card.Text>
+          <Amount>{asNumber(convertedBalance(), {precision: 0})}</Amount>
+        </Card.Text>
+      </Card.Body>
+    </Card>
   )
 }
 
