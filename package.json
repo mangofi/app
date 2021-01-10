@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "deploy:ropsten", "truffle deploy --network ropsten-infura --reset"
+    "deploy:ropsten": "truffle deploy --network ropsten-infura --reset"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
