@@ -16,7 +16,9 @@ function ConnectButton({ wallet, walletActions }) {
   
   const walletConnection = useWalletConnection()
   useEffect(async () => {
-    await selectAccount()
+    if (walletConnection) {
+      await selectAccount()
+    }
   }, [walletConnection, wallet.account])
   
   const onConnect = async () => {
@@ -25,7 +27,7 @@ function ConnectButton({ wallet, walletActions }) {
   }
   
   const selectAccount = async () => {
-    if (signedIn || !walletConnection) {
+    if (signedIn) {
       return
     }
 
