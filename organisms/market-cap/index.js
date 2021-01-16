@@ -5,7 +5,8 @@ import CoinGecko from 'coingecko-api'
 import MangoToken from '../../abis/MangoToken'
 import Amount from "../../molecules/amount"
 import connector from "../../lib/connector"
-import {asMoney, asNumber} from "../../lib/number"
+import {asMoney, asNumber, asEther} from "../../lib/number"
+import useWalletConnection from '../../lib/use-wallet-connection'
 
 import * as Styles from './styles'
 
@@ -17,13 +18,14 @@ function MarketCap({ wallet }) {
   const isBrowser = (typeof window !== "undefined");
   const [marketCap, setMarketCap] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
+  const walletConnection = useWalletConnection()
 
   const loadTotalSupply = async () => {
-    const networkId = await window.web3.eth.net.getId()
+    const networkId = await walletConnection.getNetworkId()
     const networkData = MangoToken.networks[networkId]
 
     if (networkData) {
-      const mangoToken = new web3.eth.Contract(MangoToken.abi, networkData.address)
+      const mangoToken = walletConnection.buildContract(MangoToken.abi, networkData.address)
       const supply = await mangoToken.methods.totalSupply().call()
 
       setTotalSupply(supply)
@@ -40,7 +42,7 @@ function MarketCap({ wallet }) {
   
   const convertedTotalSupply = () => {
     if (isBrowser && wallet.signedIn) {
-      return window.web3.utils.fromWei(totalSupply.toString(), 'Ether')
+      return asEther(totalSupply)
     }
     
     return totalSupply
@@ -49,12 +51,11 @@ function MarketCap({ wallet }) {
   useEffect(async () => {
     await loadMarketCap()
   }, [])
-
   useEffect(async () => {
-    if (wallet.account) {
+    if (walletConnection) {
       await loadTotalSupply()
     }
-  }, [wallet.account, wallet.signedIn])
+  }, [walletConnection])
 
   return (
     <Card>
