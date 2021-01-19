@@ -13,29 +13,27 @@ function ConnectButton({ wallet, walletActions }) {
   const {
     setAccount
   } = walletActions
-  
   const walletConnection = useWalletConnection()
+
   useEffect(async () => {
     if (walletConnection) {
-      await selectAccount()
+      await updateCurrentAccount()
     }
   }, [walletConnection, wallet.account])
   
-  const onConnect = async () => {
-    await walletConnection.connect()
-    await selectAccount()
-  }
-  
-  const selectAccount = async () => {
-    if (signedIn) {
-      return
-    }
-
+  const updateCurrentAccount = async () => {
     const accounts = await walletConnection.getAccounts()
 
-    if (accounts) {
+    if (accounts[0]) {
       setAccount(accounts[0])
+    } else {
+      setAccount(null)
     }
+  }
+  
+  const onConnect = async () => {
+    await walletConnection.connect(updateCurrentAccount)
+    await updateCurrentAccount()
   }
 
   return (
