@@ -12,8 +12,16 @@ import * as Styles from './styles'
 function StakedBalance({ wallet }) {
   const [balance, setBalance] = useState(0)
   const walletConnection = useContext(WalletConnectionContext)
+  
+  useEffect(async () => {
+    if (wallet.account) {
+      await loadBalance()
+    } else {
+      setBalance(0)
+    }
+  }, [wallet.account])
 
-  const loadData = async () => {
+  const loadBalance = async () => {
     const networkId = await walletConnection.getNetworkId()
 
     if (!networkId) {
@@ -30,14 +38,6 @@ function StakedBalance({ wallet }) {
       setBalance(0)
     }
   }
-  
-  useEffect(async () => {
-    if (wallet.account) {
-      await loadData()
-    } else {
-      setBalance(0)
-    }
-  }, [wallet.account])
 
   return (
     <Card>

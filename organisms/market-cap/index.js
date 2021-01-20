@@ -18,6 +18,13 @@ function MarketCap({ wallet }) {
   const [marketCap, setMarketCap] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
   const walletConnection = useContext(WalletConnectionContext)
+  
+  useEffect(async () => {
+    await loadTotalSupply()
+  }, [])
+  useEffect(async () => {
+    await loadMarketCap()
+  }, [wallet.account])
 
   const loadTotalSupply = async () => {
     const networkId = await walletConnection.getNetworkId()
@@ -43,11 +50,6 @@ function MarketCap({ wallet }) {
       setMarketCap(result.data.market_data.market_cap.usd)
     }
   }
-  
-  useEffect(async () => {
-    await loadMarketCap()
-    await loadTotalSupply()
-  }, [wallet.account])
 
   return (
     <Card>
