@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Card } from "react-bootstrap"
 import CoinGecko from 'coingecko-api'
 
 import MangoToken from '../../abis/MangoToken'
 import Amount from "../../molecules/amount"
 import connector from "../../lib/connector"
-import {asMoney, asNumber} from "../../lib/number"
+import {asMoney, asNumber, asEther} from "../../lib/number"
+import {WalletConnectionContext} from "../../lib/wallet-connection"
 
 import * as Styles from './styles'
 
@@ -14,18 +15,23 @@ const CoinGeckoClient = new CoinGecko()
 const COIN_NAME = 'ethereum'
 
 function MarketCap({ wallet }) {
-  const isBrowser = (typeof window !== "undefined");
   const [marketCap, setMarketCap] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
+  const walletConnection = useContext(WalletConnectionContext)
 
   const loadTotalSupply = async () => {
-    const networkId = await window.web3.eth.net.getId()
+    const networkId = await walletConnection.getNetworkId()
+    
+    if (!networkId) {
+      return
+    }
+
     const networkData = MangoToken.networks[networkId]
-
-    if (networkData) {
-      const mangoToken = new web3.eth.Contract(MangoToken.abi, networkData.address)
+    
+    if (networkData && networkData.address) {
+      const mangoToken = walletConnection.buildContract(MangoToken.abi, networkData.address)
       const supply = await mangoToken.methods.totalSupply().call()
-
+    
       setTotalSupply(supply)
     }
   }
@@ -38,23 +44,10 @@ function MarketCap({ wallet }) {
     }
   }
   
-  const convertedTotalSupply = () => {
-    if (isBrowser && wallet.signedIn) {
-      return window.web3.utils.fromWei(totalSupply.toString(), 'Ether')
-    }
-    
-    return totalSupply
-  }
-  
   useEffect(async () => {
     await loadMarketCap()
-  }, [])
-
-  useEffect(async () => {
-    if (wallet.account) {
-      await loadTotalSupply()
-    }
-  }, [wallet.account, wallet.signedIn])
+    await loadTotalSupply()
+  }, [wallet.account])
 
   return (
     <Card>
@@ -67,7 +60,7 @@ function MarketCap({ wallet }) {
         </Card.Text>
       </Card.Body>
       <Card.Footer>
-        Total Supply: {asNumber(convertedTotalSupply(), {precision: 0})} MNGO
+        Total Supply: {asNumber(asEther(totalSupply), {precision: 0})} MNGO
       </Card.Footer>
     </Card>
   )

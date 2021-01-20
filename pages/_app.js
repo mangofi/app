@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux'
 
 import store from "../config/store"
+import {WalletConnectionProvider} from "../lib/wallet-connection"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css'
@@ -8,7 +9,9 @@ import '../styles/globals.css'
 function MangofiApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <WalletConnectionProvider>
+        <Component {...pageProps} />
+      </WalletConnectionProvider>
     </Provider>
   )
 }
