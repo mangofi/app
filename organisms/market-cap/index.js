@@ -20,10 +20,8 @@ function MarketCap({ wallet }) {
   const walletConnection = useContext(WalletConnectionContext)
   
   useEffect(async () => {
-    await loadTotalSupply()
-  }, [])
-  useEffect(async () => {
     await loadMarketCap()
+    await loadTotalSupply()
   }, [wallet.account])
 
   const loadTotalSupply = async () => {
@@ -61,9 +59,11 @@ function MarketCap({ wallet }) {
           <Amount currency='USD'>{marketCap ? asMoney(marketCap, {precision: 0}) : "--"}</Amount>
         </Card.Text>
       </Card.Body>
-      <Card.Footer>
-        Total Supply: {asNumber(asEther(totalSupply), {precision: 0})} MNGO
-      </Card.Footer>
+      <Card.Body>
+        <Card.Text>
+          Total Supply: {asNumber(asEther(totalSupply), {precision: 0})} MNGO
+        </Card.Text>
+      </Card.Body>
     </Card>
   )
 }

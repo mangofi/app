@@ -3,54 +3,41 @@ import { Card } from "react-bootstrap"
 
 import MangoToken from '../../abis/MangoToken'
 import Amount from "../../molecules/amount"
+import InputButton from "../../molecules/input-button"
 import connector from "../../lib/connector"
 import {asNumber, asEther} from "../../lib/number"
 import {WalletConnectionContext} from "../../lib/wallet-connection"
 
 import * as Styles from './styles'
 
-function StakedBalance({ wallet }) {
+function Stake({ wallet }) {
   const [balance, setBalance] = useState(0)
   const walletConnection = useContext(WalletConnectionContext)
   
   useEffect(async () => {
-    if (wallet.account) {
-      await loadBalance()
-    } else {
-      setBalance(0)
-    }
-  }, [wallet.account])
-
-  const loadBalance = async () => {
-    const networkId = await walletConnection.getNetworkId()
-
-    if (!networkId) {
-      return
-    }
-
-    const networkData = MangoToken.networks[networkId]
-    if (networkData && networkData.address) {
-      const mangoToken = walletConnection.buildContract(MangoToken.abi, networkData.address)
     
-      const balanceOf = await mangoToken.methods.balanceOf(wallet.account).call()
-      setBalance(balanceOf)
-    } else {
-      setBalance(0)
-    }
-  }
+  }, [wallet.account])
 
   return (
     <Card>
       <Card.Body>
         <Card.Title>
-          Total Staked Balance
+          Your Staked Balance
         </Card.Title>
         <Card.Text>
           <Amount>{asNumber(asEther(balance), {precision: 0})}</Amount>
+        </Card.Text>
+      </Card.Body>
+      <Card.Body>
+        <Card.Title>
+          Amount to Stake
+        </Card.Title>
+        <Card.Text>
+          <InputButton color="#61ce70" placeholder="MNGO to stake" text="All" />
         </Card.Text>
       </Card.Body>
     </Card>
   )
 }
 
-export default connector(['wallet'])(StakedBalance)
+export default connector(['wallet'])(Stake)

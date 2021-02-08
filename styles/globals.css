@@ -13,7 +13,7 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: orange;
+  color: #ffb16a;
   text-decoration: none;
 }
 
@@ -28,7 +28,7 @@ a:hover {
 
 .card-title {
   border-bottom: 1px solid #ddd;
-  color: orange;
+  color: #ffb16a;
   padding-bottom: 5px;
   text-align: right;
 }

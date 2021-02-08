@@ -9,7 +9,7 @@ import {WalletConnectionContext} from "../../lib/wallet-connection"
 
 import * as Styles from './styles'
 
-function StakedBalance({ wallet }) {
+function Balance({ wallet }) {
   const [balance, setBalance] = useState(0)
   const walletConnection = useContext(WalletConnectionContext)
   
@@ -43,7 +43,7 @@ function StakedBalance({ wallet }) {
     <Card>
       <Card.Body>
         <Card.Title>
-          Total Staked Balance
+          Available MNGO Balance
         </Card.Title>
         <Card.Text>
           <Amount>{asNumber(asEther(balance), {precision: 0})}</Amount>
@@ -53,4 +53,4 @@ function StakedBalance({ wallet }) {
   )
 }
 
-export default connector(['wallet'])(StakedBalance)
+export default connector(['wallet'])(Balance)
