@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Card } from "react-bootstrap"
+import { Card, Button } from "react-bootstrap"
 
 import MangoToken from '../../abis/MangoToken'
 import Amount from "../../molecules/amount"
@@ -34,6 +34,9 @@ function Rewards({ wallet }) {
         </Card.Title>
         <Card.Text>
           <InputButton color="#ff5689" placeholder="MNGO to unstake" text="All" />
+          <Button variant="danger" className="mt-2" block>
+            Withdraw
+          </Button>
         </Card.Text>
       </Card.Body>
     </Card>
