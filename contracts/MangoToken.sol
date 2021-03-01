@@ -3,22 +3,33 @@ pragma solidity ^0.6.0;
 import "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol";
 
 contract MangoToken is ERC20PresetMinterPauser {
+    struct User {
+      uint256 amount;
+    }
+    
+    mapping (uint256 => mapping (address => User)) public users;
+
     constructor() public ERC20PresetMinterPauser("Mango", "MNGO") {
         _mint(msg.sender, 10000000000000000000000);
     }
     
-    function _mintMinerReward() internal {
-        _mint(block.coinbase, 1000000000000000000);
-    }
+    function stake(uint256 _amount) public {
+      User storage user = users[0][msg.sender];
 
-    function _beforeTokenTransfer(address from, address to, uint256 value) internal virtual override {
-        if (from != address(0)) {
-          _mintMinerReward();
-        }
-        super._beforeTokenTransfer(from, to, value);
+      if (_amount > 0) {
+        user.amount = user.amount.add(_amount);
+        transferFrom(msg.sender, address(this), _amount);
+      }
     }
     
-    function stake(uint256 amount) public {
-      transferFrom(msg.sender, address(this), amount)
+    function unstake(uint256 _amount) public {
+      User storage user = users[0][msg.sender];
+      
+      require(user.amount >= _amount, "Insufficient funds to unstake");
+      
+      if (_amount > 0) {
+        user.amount = user.amount.sub(_amount);
+        transferFrom(address(this), msg.sender, _amount);
+      }
     }
 }
