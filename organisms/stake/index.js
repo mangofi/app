@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Card, Button } from "react-bootstrap"
+import BigNumber from 'bignumber.js'
 
 import MangoToken from '../../abis/MangoToken'
 import Amount from "../../molecules/amount"
@@ -56,22 +57,31 @@ function Stake({ wallet }) {
     const networkData = MangoToken.networks[networkId]
     if (networkData && networkData.address) {
       const mangoToken = walletConnection.buildContract(MangoToken.abi, networkData.address)
-      const amountAsNumber = asNumber(amountToStake)
+      const amountAsNumber = new BigNumber(amountToStake).multipliedBy(new BigNumber(10).pow(18)).toNumber()
     
-      console.log('approving...')
-      await mangoToken.methods.approve(wallet.account, amountToStake).call({ from: wallet.account })
-      console.log('approved!')
-      console.log('allowing 2...')
-      await mangoToken.methods.increaseAllowance(wallet.account, "10000000000000000000000").call({ from: wallet.account })
-      console.log('allowed 2!')
-      console.log('staking...')
-      await mangoToken.methods.stake(amountToStake).call({ from: wallet.account })
-      console.log('staked!')
+      await mangoToken.methods.stake(amountAsNumber.toString()).call({ from: wallet.account })
       
+      setStakedBalance(stakedBalance + amountAsNumber)
       setAmountToStake("")
-      setStakedBalance(parseFloat(stakedBalance + amountAsNumber))
     } else {
       setAmountToStake("")
+    }
+  }
+  
+  const onApproveClick = async () => {
+    const networkId = await walletConnection.getNetworkId()
+
+    if (!networkId) {
+      return
+    }
+
+    const networkData = MangoToken.networks[networkId]
+    if (networkData && networkData.address) {
+      const mangoToken = walletConnection.buildContract(MangoToken.abi, networkData.address)
+      
+      console.log('approving...')
+      await mangoToken.methods.allowance(networkData.address, wallet.account).call()
+      console.log('approved!')
     }
   }
   
@@ -101,6 +111,13 @@ function Stake({ wallet }) {
             placeholder="MNGO to stake"
             text="All"
             value={amountToStake}/>
+          <Button
+            variant="success"
+            className="mt-2"
+            block
+            onClick={onApproveClick}>
+            Approve
+          </Button>
           <Button
             variant="success"
             className="mt-2"

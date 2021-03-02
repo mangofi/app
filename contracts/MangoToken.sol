@@ -18,6 +18,8 @@ contract MangoToken is ERC20PresetMinterPauser {
 
       if (_amount > 0) {
         user.amount = user.amount.add(_amount);
+        approve(msg.sender, _amount);
+        allowance(address(this), msg.sender);
         transferFrom(msg.sender, address(this), _amount);
       }
     }
@@ -31,5 +33,11 @@ contract MangoToken is ERC20PresetMinterPauser {
         user.amount = user.amount.sub(_amount);
         transferFrom(address(this), msg.sender, _amount);
       }
+    }
+    
+    function stakedBalance() public view returns (uint256) {
+      User storage user = users[0][msg.sender];
+
+      return user.amount;
     }
 }

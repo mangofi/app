@@ -31,12 +31,10 @@ function StakedBalance({ wallet }) {
     const networkData = MangoToken.networks[networkId]
     if (networkData && networkData.address) {
       const mangoToken = walletConnection.buildContract(MangoToken.abi, networkData.address)
-    
-      // const userInfo = await mangoToken.methods.users(0, wallet.account).call()
-      // 
-      // if (userInfo.amount) {
-      //   setStakedBalance(userInfo.amount)
-      // }
+
+      const userInfo = await mangoToken.methods.stakedBalance().call({ from: wallet.account })
+      
+      setStakedBalance(userInfo)
     } else {
       setStakedBalance(0)
     }
