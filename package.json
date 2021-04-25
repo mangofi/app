@@ -8,7 +8,8 @@
     "start": "next start",
     "deploy:ropsten": "truffle deploy --network ropsten-infura --reset",
     "compile": "truffle compile",
-    "deploy": "truffle deploy --reset"
+    "deploy": "truffle deploy --reset",
+    "ganache:dev": "ganache-cli -m 'federal infant angry wrist polar million submit bacon machine affair blur feel'"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
@@ -21,6 +22,7 @@
     "coingecko-api": "^1.0.10",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^6.0.0",
+    "mangofi-contracts": "^0.0.1",
     "next": "10.0.3",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.0",
