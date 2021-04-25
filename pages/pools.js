@@ -19,7 +19,7 @@ export default function Home() {
           <ul className="list-unstyled">
             <li>
               <Link href="/" className="text-primary">
-                <a className="text-primary"><i>🏡</i> Home</a>
+                <a><i>🏡</i> Home</a>
               </Link>
             </li>
             <li>
@@ -27,7 +27,7 @@ export default function Home() {
             </li>
             <li>
               <Link href="/pools">
-                <a><i>🌴</i> Pools</a>
+                <a className="text-primary"><i>🌴</i> Pools</a>
               </Link>
             </li>
             <li>
@@ -64,7 +64,7 @@ export default function Home() {
           </ul>
         </div>
         <div className="d-flex flex-fill" style={{ paddingLeft: 84 }}>
-          <h1>Welcome to MangoFi</h1>
+          <h1>Pools 🌴</h1>
         </div>
       </div>
     </Container>

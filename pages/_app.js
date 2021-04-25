@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux'
 
-import store from "../config/store"
+import store from "../redux/store"
 import {WalletConnectionProvider} from "../lib/wallet-connection"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
