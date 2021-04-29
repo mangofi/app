@@ -8,7 +8,6 @@ import { faTwitter, faMedium, faTelegram } from '@fortawesome/free-brands-svg-ic
 
 import SidebarMenu from '../../molecules/sidebar-menu';
 import SidebarMenuItem from '../../molecules/sidebar-menu-item';
-import SidebarMiniMenuItem from '../../molecules/sidebar-mini-menu-item';
 
 import ConnectButton from '../../molecules/connect-button';
 
