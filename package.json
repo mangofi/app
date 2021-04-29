@@ -9,7 +9,8 @@
     "deploy:ropsten": "truffle deploy --network ropsten-infura --reset",
     "compile": "truffle compile",
     "deploy": "truffle deploy --reset",
-    "ganache:dev": "ganache-cli -m 'federal infant angry wrist polar million submit bacon machine affair blur feel'"
+    "ganache:dev": "ganache-cli -m 'federal infant angry wrist polar million submit bacon machine affair blur feel'",
+    "lint": "eslint"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -29,6 +30,8 @@
     "dotenv-webpack": "^6.0.0",
     "mangofi-contracts": "^0.0.1",
     "next": "10.0.3",
+    "node-sass": "^5.0.0",
+    "prop-types": "^15.7.2",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-dom": "17.0.1",
@@ -41,6 +44,12 @@
     "web3-utils": "^1.3.1"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "^3.4.0"
+    "@openzeppelin/contracts": "^3.4.0",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

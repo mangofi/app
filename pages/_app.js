@@ -1,10 +1,10 @@
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 
-import store from "../redux/store"
-import {WalletConnectionProvider} from "../lib/wallet-connection"
+import store from '../redux/store';
+import { WalletConnectionProvider } from '../lib/wallet-connection';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/globals.css'
+import '../styles/globals.scss';
 
 function MangofiApp({ Component, pageProps }) {
   return (
@@ -13,7 +13,7 @@ function MangofiApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </WalletConnectionProvider>
     </Provider>
-  )
+  );
 }
 
-export default MangofiApp
+export default MangofiApp;

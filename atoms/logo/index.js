@@ -1,11 +1,18 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import * as Styles from './styles'
+const Logo = ({ className }) => (
+  <img
+    alt="mango logo"
+    className={className}
+    src="/img/logo.svg"
+    width={46}
+    height={46}
+  />
+);
 
-const Logo = () => {
-  return (
-    <img src="/img/logo.svg" width={46} height={46}/>
-  )
-}
+Logo.propTypes = {
+  className: PropTypes.string.isRequired,
+};
 
-export default Logo
+export default Logo;
