@@ -12,7 +12,7 @@ import { MNGO } from '../coin/constants';
 import * as Styles from './styles';
 
 const PoolCard = ({
-  token, verified, apr, approved,
+  token, verified, apr, approved, tokenEarnings,
 }) => {
   const renderVerified = useCallback(() => {
     if (verified) {
@@ -38,6 +38,15 @@ const PoolCard = ({
     return null;
   }, [apr]);
 
+  const renderEarnings = useCallback(() => tokenEarnings.map(({ earnings, usdEarnings, token }) => (
+    <TokenBalance
+      token={token}
+      actions={[<Button secondary flat disabled={!approved}>Collect</Button>]}
+      earnings={earnings}
+      usdEarnings={usdEarnings}
+    />
+  )));
+
   return (
     <Styles.StyledCard coin={<Coin name={token} />}>
       <small className="d-flex flex-fill flex-row justify-content-end text-right">
@@ -53,11 +62,8 @@ const PoolCard = ({
           </h6>
           {renderApr()}
         </div>
-        <Styles.EarningsContainer className="d-flex flex-fill flex-column mt-4">
-          <TokenBalance
-            token={token}
-            actions={[<Button secondary flat disabled={!approved}>Collect</Button>]}
-          />
+        <Styles.EarningsContainer className="d-flex flex-fill flex-column mt-3">
+          {renderEarnings()}
         </Styles.EarningsContainer>
         <div>
           <Button block>
@@ -74,6 +80,7 @@ PoolCard.propTypes = {
   verified: PropTypes.bool,
   apr: PropTypes.string,
   approved: PropTypes.bool,
+  tokenEarnings: PropTypes.any,
 };
 
 PoolCard.defaultProps = {
@@ -81,6 +88,7 @@ PoolCard.defaultProps = {
   verified: false,
   apr: null,
   approved: false,
+  tokenEarnings: [],
 };
 
 export default PoolCard;
