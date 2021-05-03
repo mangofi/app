@@ -13,5 +13,4 @@ export const VerifiedIconContainer = styled.span`
 `;
 
 export const EarningsContainer = styled.div`
-  margin-bottom: 80px;
 `;

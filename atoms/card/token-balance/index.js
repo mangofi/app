@@ -4,32 +4,34 @@ import PropTypes from 'prop-types';
 import * as Styles from './styles';
 
 const TokenBalance = ({
-  token, actions, earnings, usdEarnings,
+  title, actions, earnings, usdEarnings,
 }) => (
   <Styles.Container>
     <div className="d-flex flex-fill flex-row justify-content-end">
-      <div className="d-flex flex-fill flex-column">
+      <div className="d-flex flex-fill flex-column justify-content-end">
         <p className="m-0">
-          {token}
-          {' '}
-          Earned
+          {title}
         </p>
-        <h4>{earnings}</h4>
-        <small className="text-gray">
-          {usdEarnings}
-          {' '}
-          USD
-        </small>
+        {earnings ? <h4>{earnings}</h4> : null}
+        {usdEarnings ? (
+          <small className="text-gray">
+            {usdEarnings}
+            {' '}
+            USD
+          </small>
+        ) : null}
       </div>
-      <div className="d-flex flex-column justify-content-center">
-        {actions}
-      </div>
+      {actions ? (
+        <div className="d-flex flex-column justify-content-center">
+          {actions}
+        </div>
+      ) : null}
     </div>
   </Styles.Container>
 );
 
 TokenBalance.propTypes = {
-  token: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   actions: PropTypes.element,
   earnings: PropTypes.string,
   usdEarnings: PropTypes.string,

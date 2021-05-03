@@ -12,7 +12,7 @@ import { MNGO } from '../coin/constants';
 import * as Styles from './styles';
 
 const PoolCard = ({
-  token, verified, apr, approved, tokenEarnings,
+  token, verified, apr, approved, tokenEarnings, canUnstake,
 }) => {
   const renderVerified = useCallback(() => {
     if (verified) {
@@ -38,12 +38,16 @@ const PoolCard = ({
     return null;
   }, [apr]);
 
-  const renderEarnings = useCallback(() => tokenEarnings.map(({ earnings, usdEarnings, token }) => (
+  const renderStakeTitle = useCallback(() => (canUnstake ? `Unstake ${token}` : `Stake ${token}`), [canUnstake]);
+
+  const renderEarnings = useCallback(() => tokenEarnings.map(({
+    earnings, usdEarnings, token: earningsToken, empty, staked,
+  }) => (
     <TokenBalance
-      token={token}
-      actions={[<Button secondary flat disabled={!approved}>Collect</Button>]}
-      earnings={earnings}
-      usdEarnings={usdEarnings}
+      title={`${earningsToken} ${staked ? 'Staked' : 'Earned'}`}
+      actions={!empty && [<Button fixedWidth secondary={!staked} flat disabled={!approved}>{staked ? 'Stake' : 'Collect'}</Button>]}
+      earnings={!empty && earnings}
+      usdEarnings={!empty && usdEarnings}
     />
   )));
 
@@ -66,8 +70,8 @@ const PoolCard = ({
           {renderEarnings()}
         </Styles.EarningsContainer>
         <div>
-          <Button block>
-            Enable
+          <Button flat secondary={approved && canUnstake} block>
+            {approved ? renderStakeTitle() : 'Enable'}
           </Button>
         </div>
       </div>
@@ -81,6 +85,7 @@ PoolCard.propTypes = {
   apr: PropTypes.string,
   approved: PropTypes.bool,
   tokenEarnings: PropTypes.any,
+  canUnstake: PropTypes.bool,
 };
 
 PoolCard.defaultProps = {
@@ -89,6 +94,7 @@ PoolCard.defaultProps = {
   apr: null,
   approved: false,
   tokenEarnings: [],
+  canUnstake: false,
 };
 
 export default PoolCard;

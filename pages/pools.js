@@ -19,11 +19,21 @@ const Home = () => (
         token={MNGO}
         verified
         apr="138.62%"
+        approved
         tokenEarnings={[
           {
             earnings: '1.000',
             usdEarnings: '~0.010',
+            empty: false,
             token: MNGO,
+            stake: false,
+          },
+          {
+            earnings: '1.000',
+            usdEarnings: '~0.010',
+            empty: false,
+            token: MNGO,
+            staked: true,
           },
         ]}
       />

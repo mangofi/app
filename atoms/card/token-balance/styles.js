@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  margin-bottom: 14px;
+  display: flex;
+  margin-bottom: 10px;
+  min-height: 76px;
 `;

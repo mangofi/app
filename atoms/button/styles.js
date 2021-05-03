@@ -12,6 +12,7 @@ export const Container = styled(Button)`
   font-size: 14px;
   height: 42px;
   line-height: 24px;
+  min-width: ${({ fixedWidth }) => (fixedWidth ? '100px' : 'auto')};
   padding: 8px 28px;
   
   ${({ secondary }) => {
