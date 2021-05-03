@@ -7,7 +7,10 @@ import Page from '../organisms/page';
 
 const Home = () => (
   <Page currentPage="/pools">
-    <h4>Pools 🌴</h4>
+    <h4 style={{ position: 'relative' }}>
+      Pools 🌴
+      <img src="/img/deco-1.svg" style={{ position: 'absolute', right: 0, top: 0 }} />
+    </h4>
     <div>
       Stake MNGO to earn new tokens. You can unstake at any time.
       <p>

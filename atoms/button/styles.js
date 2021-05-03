@@ -75,5 +75,6 @@ export const Container = styled(Button)`
     -moz-box-shadow:    none;
     box-shadow:         none;
     color: var(--black400) !important;
+    cursor: auto;
   }
 `;
