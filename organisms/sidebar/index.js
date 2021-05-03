@@ -21,7 +21,7 @@ const Sidebar = ({ currentPage }) => (
       <SidebarMenuItem icon="🏡" href="/" active={currentPage === '/'}>
         Home
       </SidebarMenuItem>
-      <SidebarMenuItem icon="👛" href="#" active={currentPage === '#'}>
+      <SidebarMenuItem icon="👛" href="#" active={currentPage === '#'} disabled>
         Exchange
       </SidebarMenuItem>
       <SidebarMenuItem icon="🌴" href="/pools" active={currentPage === '/pools'}>
@@ -30,7 +30,7 @@ const Sidebar = ({ currentPage }) => (
       <SidebarMenuItem icon="🚜" href="#" active={currentPage === '#'}>
         Farm
       </SidebarMenuItem>
-      <SidebarMenuItem icon="💸" href="#" active={currentPage === '#'}>
+      <SidebarMenuItem icon="💸" href="#" active={currentPage === '#'} disabled>
         Fortune
       </SidebarMenuItem>
       <SidebarMenuItem icon="💎" href="#" active={currentPage === '#'}>

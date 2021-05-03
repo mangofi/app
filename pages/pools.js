@@ -1,6 +1,8 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 
+import PageContent from '../atoms/page-content';
+
 import Sidebar from '../organisms/sidebar';
 
 const Home = () => (
@@ -10,7 +12,7 @@ const Home = () => (
     }}
     >
       <Sidebar currentPage="/pools" />
-      <div className="d-flex flex-fill flex-column">
+      <PageContent>
         <h4>Pools 🌴</h4>
         <div>
           Stake MNGO to earn new tokens. You can unstake at any time.
@@ -18,7 +20,7 @@ const Home = () => (
             Rewards are calculated per block
           </p>
         </div>
-      </div>
+      </PageContent>
     </div>
   </Container>
 );

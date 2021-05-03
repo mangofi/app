@@ -3,6 +3,8 @@ import {
   Container,
 } from 'react-bootstrap';
 
+import PageContent from '../atoms/page-content';
+
 import Sidebar from '../organisms/sidebar';
 
 export default function Home() {
@@ -13,9 +15,9 @@ export default function Home() {
       }}
       >
         <Sidebar currentPage="/" />
-        <div className="d-flex flex-fill">
+        <PageContent>
           <h1>Welcome to MangoFi</h1>
-        </div>
+        </PageContent>
       </div>
     </Container>
   );

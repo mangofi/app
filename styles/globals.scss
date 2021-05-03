@@ -49,6 +49,10 @@ body {
   height: 100%;
 }
 
+body {
+  background: url('/img/bg.svg') top left / cover;
+}
+
 h1 {
   
 }
@@ -84,4 +88,8 @@ a {
 a:hover {
   color: var(--primary500);
   text-decoration: none;
+}
+
+p {
+  line-height: 28px
 }

@@ -22,7 +22,7 @@ export const Address = styled.button`
   padding: 0 10px;
   width: 100%;
   
-  &:hover {
+  &:hover, &:active {
     border-color: orange;
   }
 `;
@@ -39,12 +39,8 @@ export const ConnectBtn = styled(Button)`
   height: 50px;
   padding: 0 10px;
   
-  &:hover {
+  &:hover, &:active {
     background-color: var(--primary600);
-  }
-  
-  &:active {
-    background-color: gray;
   }
 `;
 
