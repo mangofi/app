@@ -3,6 +3,10 @@ import { Container } from 'react-bootstrap';
 
 import PageContent from '../atoms/page-content';
 
+import Coin from '../molecules/coin';
+import { MNGO } from '../molecules/coin/constants';
+import PoolCard from '../molecules/pool-card';
+
 import Sidebar from '../organisms/sidebar';
 
 const Home = () => (
@@ -19,6 +23,11 @@ const Home = () => (
           <p>
             Rewards are calculated per block
           </p>
+        </div>
+        <div>
+          <PoolCard token={MNGO} verified apr="138.62%">
+            This is my first pool card
+          </PoolCard>
         </div>
       </PageContent>
     </div>
