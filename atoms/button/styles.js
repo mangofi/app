@@ -52,7 +52,7 @@ export const Container = styled(Button)`
     return null;
   }}
   
-  &:hover, &:active {
+  &:hover, &:active, &:focus {
     background-color: var(--primary600) !important;
     border-color: var(--primary500) !important;
     
