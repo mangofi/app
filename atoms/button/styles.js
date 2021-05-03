@@ -13,10 +13,58 @@ export const Container = styled(Button)`
   height: 42px;
   line-height: 24px;
   padding: 8px 28px;
+  
+  ${({ secondary }) => {
+    if (secondary) {
+      return `
+        background-color: var(--primary100);
+        color: var(--primary500);
+      `;
+    }
 
+    return null;
+  }}
+  
+  ${({ small }) => {
+    if (small) {
+      return `
+        background-color: var(--black200);
+        color: var(--black400);
+        font-size: 14px;
+        height: auto;
+        padding: 3px;
+      `;
+    }
+
+    return null;
+  }}
+  
+  ${({ flat }) => {
+    if (flat) {
+      return `
+        -webkit-box-shadow: none;
+        -moz-box-shadow:    none;
+        box-shadow:         none;
+      `;
+    }
+
+    return null;
+  }}
+  
   &:hover, &:active {
     background-color: var(--primary600) !important;
     border-color: var(--primary500) !important;
+    
+    ${({ secondary }) => {
+    if (secondary) {
+      return `
+          background-color: var(--primary200) !important;
+          color: var(--primary500);
+        `;
+    }
+
+    return null;
+  }}
   }
   
   &:disabled {
@@ -27,21 +75,4 @@ export const Container = styled(Button)`
     box-shadow:         none;
     color: var(--black400) !important;
   }
-  
-  ${({ small }) => {
-    if (small) {
-      return `
-        background-color: var(--black200);
-        -webkit-box-shadow: none;
-        -moz-box-shadow:    none;
-        box-shadow:         none;
-        color: var(--black400);
-        font-size: 14px;
-        height: auto;
-        padding: 3px;
-      `;
-    }
-
-    return null;
-  }}
 `;

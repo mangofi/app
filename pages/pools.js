@@ -25,7 +25,7 @@ const Home = () => (
           </p>
         </div>
         <div>
-          <PoolCard token={MNGO} verified apr="138.62%">
+          <PoolCard token={MNGO} verified apr="138.62%" approved>
             This is my first pool card
           </PoolCard>
         </div>

@@ -11,7 +11,9 @@ import { MNGO } from '../coin/constants';
 
 import * as Styles from './styles';
 
-const PoolCard = ({ token, verified, apr }) => {
+const PoolCard = ({
+  token, verified, apr, approved,
+}) => {
   const renderVerified = useCallback(() => {
     if (verified) {
       return (
@@ -54,7 +56,7 @@ const PoolCard = ({ token, verified, apr }) => {
         <Styles.EarningsContainer className="d-flex flex-fill flex-column mt-4">
           <TokenBalance
             token={token}
-            actions={[<Button disabled>Collect</Button>]}
+            actions={[<Button secondary flat disabled={!approved}>Collect</Button>]}
           />
         </Styles.EarningsContainer>
         <div>
@@ -68,17 +70,17 @@ const PoolCard = ({ token, verified, apr }) => {
 };
 
 PoolCard.propTypes = {
-  children: PropTypes.element,
   token: PropTypes.string,
   verified: PropTypes.bool,
   apr: PropTypes.string,
+  approved: PropTypes.bool,
 };
 
 PoolCard.defaultProps = {
-  children: null,
   token: MNGO,
   verified: false,
   apr: null,
+  approved: false,
 };
 
 export default PoolCard;
