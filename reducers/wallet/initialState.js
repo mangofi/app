@@ -1,4 +1,5 @@
 export default {
   account: null,
-  signedIn: false
-}
+  signedIn: false,
+  networkId: null,
+};

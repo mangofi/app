@@ -6,13 +6,13 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../atoms/button';
 import { TokenBalance } from '../../atoms/card';
 
-import Coin from '../coin';
-import { MNGO } from '../coin/constants';
+import Coin from '../../molecules/coin';
+import { MNGO } from '../../molecules/coin/constants';
 
 import * as Styles from './styles';
 
 const PoolCard = ({
-  token, verified, apr, approved, tokenEarnings, canUnstake,
+  token, verified, apr, approved, tokenEarnings, canUnstake, onEnable,
 }) => {
   const renderVerified = useCallback(() => {
     if (verified) {
@@ -70,7 +70,7 @@ const PoolCard = ({
           {renderEarnings()}
         </Styles.EarningsContainer>
         <div>
-          <Button flat secondary={approved && canUnstake} block>
+          <Button flat secondary={approved && canUnstake} block onClick={approved ? () => {} : onEnable}>
             {approved ? renderStakeTitle() : 'Enable'}
           </Button>
         </div>
@@ -86,6 +86,7 @@ PoolCard.propTypes = {
   approved: PropTypes.bool,
   tokenEarnings: PropTypes.any,
   canUnstake: PropTypes.bool,
+  onEnable: PropTypes.func,
 };
 
 PoolCard.defaultProps = {
@@ -95,6 +96,7 @@ PoolCard.defaultProps = {
   approved: false,
   tokenEarnings: [],
   canUnstake: false,
+  onEnable: () => {},
 };
 
 export default PoolCard;

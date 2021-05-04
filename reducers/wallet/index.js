@@ -1,6 +1,6 @@
 import {
-  SET_ACCOUNT
-} from "../../actions/wallet/action-types"
+  SET_ACCOUNT,
+} from '../../actions/wallet/action-types';
 
 import initialState from './initialState';
 
@@ -9,13 +9,12 @@ export default function Web3(state = initialState, action) {
     case SET_ACCOUNT:
       return {
         ...state,
-        account: action.payload.account,
-        signedIn: action.payload.signedIn
-      }
+        ...action.payload,
+      };
       break;
     default:
       return {
-        ...state
-      }
+        ...state,
+      };
   }
 }

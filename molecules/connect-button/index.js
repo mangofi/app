@@ -10,9 +10,6 @@ function ConnectButton({ wallet, walletActions }) {
     account,
     signedIn,
   } = wallet;
-  const {
-    setAccount,
-  } = walletActions;
   const walletConnection = useContext(WalletConnectionContext);
 
   const onConnect = async () => {

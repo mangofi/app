@@ -1,17 +1,31 @@
 import {
-  SET_ACCOUNT
-} from "./action-types"
+  SET_ACCOUNT,
+} from './action-types';
 
 export function setAccount(address) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: SET_ACCOUNT,
       payload: {
         account: address,
-        signedIn: !!address
-      }
-    })
-  }
+        signedIn: !!address,
+      },
+    });
+  };
 }
 
-export default {setAccount}
+export function setNetworkId(networkId) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_ACCOUNT,
+      payload: {
+        networkId,
+      },
+    });
+  };
+}
+
+export default {
+  setAccount,
+  setNetworkId,
+};
