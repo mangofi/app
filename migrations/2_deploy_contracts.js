@@ -2,7 +2,7 @@ const MangoToken = artifacts.require('MangoToken');
 const SaltToken = artifacts.require('SaltToken');
 const MangoTree = artifacts.require('MangoTree');
 
-const MANGO_PER_BLOCK = 1;
+const MANGO_PER_BLOCK = '40000000000000000000';
 
 module.exports = async (deployer, networks, accounts) => {
   const mangoToken = await deployer.deploy(MangoToken);

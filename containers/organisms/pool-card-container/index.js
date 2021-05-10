@@ -33,7 +33,10 @@ const PoolCardContainer = ({
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
-      const allowance = await walletConnection.contracts[smartContract].allowance(wallet.account, walletConnection.contracts[stakingSmartContract].address).call();
+      const allowance = await walletConnection.contracts[smartContract].allowance(
+        wallet.account,
+        walletConnection.contracts[stakingSmartContract].address,
+      ).call();
 
       setApproved(allowance > 0);
     }

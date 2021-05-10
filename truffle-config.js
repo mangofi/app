@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '.env.development.local' });
 
-const HDWalletProvider = require('truffle-hdwallet-provider');
+// const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -73,6 +74,22 @@ module.exports = {
     'ropsten-infura': {
       provider: () => new HDWalletProvider(process.env.TEST_MNEMONIC, `https://ropsten.infura.io/v3/${process.env.INFURA_KEY}`, 0),
       network_id: 3,
+    },
+    bscTestnet: {
+      provider: () => new HDWalletProvider({
+        privateKeys: [process.env.TEST_PRIVATE_KEY],
+        providerOrUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+      }),
+      network_id: '97',
+      timeoutBlocks: 50000,
+    },
+    bscMainnet: {
+      provider: () => new HDWalletProvider({
+        privateKeys: [process.env.PRODUCTION_PRIVATE_KEY],
+        providerOrUrl: 'https://bsc-dataseed.binance.org/',
+      }),
+      network_id: '56',
+      gas: 1000000,
     },
     // Useful for private networks
     // private: {
