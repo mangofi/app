@@ -6,10 +6,10 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faFileAlt } from '@fortawesome/free-regular-svg-icons';
 import { faTwitter, faMedium, faTelegram } from '@fortawesome/free-brands-svg-icons';
 
-import SidebarMenu from '../../molecules/sidebar-menu';
-import SidebarMenuItem from '../../molecules/sidebar-menu-item';
+import SidebarMenu from 'components/molecules/sidebar-menu';
+import SidebarMenuItem from 'components/molecules/sidebar-menu-item';
 
-import ConnectButton from '../../molecules/connect-button';
+import ConnectButton from 'components/molecules/connect-button';
 
 import * as Styles from './styles';
 

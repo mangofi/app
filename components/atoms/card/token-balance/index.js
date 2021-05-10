@@ -12,7 +12,7 @@ const TokenBalance = ({
         <p className="m-0">
           {title}
         </p>
-        {earnings ? <h4>{earnings}</h4> : null}
+        {earnings != null ? <h4>{earnings}</h4> : null}
         {usdEarnings ? (
           <small className="text-gray">
             {usdEarnings}

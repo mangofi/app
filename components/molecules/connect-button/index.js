@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-import connector from '../../lib/connector';
-import { WalletConnectionContext } from '../../lib/wallet-connection';
+import connector from 'lib/connector';
+import { WalletConnectionContext } from 'lib/wallet-connection';
 
 import * as Styles from './styles';
 

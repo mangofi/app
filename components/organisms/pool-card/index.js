@@ -1,18 +1,19 @@
-import React, { useCallback } from 'react';
+import React, {
+  useCallback, useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-import Button from '../../atoms/button';
-import { TokenBalance } from '../../atoms/card';
+import Button from 'components/atoms/button';
+import { TokenBalance } from 'components/atoms/card';
 
-import Coin from '../../molecules/coin';
-import { MNGO } from '../../molecules/coin/constants';
+import Coin from 'components/molecules/coin';
 
 import * as Styles from './styles';
 
 const PoolCard = ({
-  token, verified, apr, approved, tokenEarnings, canUnstake, onEnable,
+  token, verified, apr, tokenEarnings, canUnstake, approved, onEnable, onStake, onUnstake,
 }) => {
   const renderVerified = useCallback(() => {
     if (verified) {
@@ -38,14 +39,24 @@ const PoolCard = ({
     return null;
   }, [apr]);
 
-  const renderStakeTitle = useCallback(() => (canUnstake ? `Unstake ${token}` : `Stake ${token}`), [canUnstake]);
+  const stakeTitle = useMemo(() => (canUnstake ? 'Unstake' : `Stake ${token}`), [canUnstake]);
 
   const renderEarnings = useCallback(() => tokenEarnings.map(({
-    earnings, usdEarnings, token: earningsToken, empty, staked,
+    earnings, usdEarnings, token: earningsToken, empty, staked, onClick,
   }) => (
     <TokenBalance
       title={`${earningsToken} ${staked ? 'Staked' : 'Earned'}`}
-      actions={!empty && [<Button fixedWidth secondary={!staked} flat disabled={!approved}>{staked ? 'Stake' : 'Collect'}</Button>]}
+      actions={!empty && [
+        <Button
+          fixedWidth
+          secondary={!staked}
+          flat
+          disabled={!approved}
+          onClick={onClick}
+        >
+          {staked ? 'Stake' : 'Collect'}
+        </Button>,
+      ]}
       earnings={!empty && earnings}
       usdEarnings={!empty && usdEarnings}
     />
@@ -70,8 +81,8 @@ const PoolCard = ({
           {renderEarnings()}
         </Styles.EarningsContainer>
         <div>
-          <Button flat secondary={approved && canUnstake} block onClick={approved ? () => {} : onEnable}>
-            {approved ? renderStakeTitle() : 'Enable'}
+          <Button flat secondary={approved && canUnstake} block onClick={approved ? (canUnstake ? onUnstake : onStake) : onEnable}>
+            {approved ? stakeTitle : 'Enable'}
           </Button>
         </div>
       </div>
@@ -80,23 +91,26 @@ const PoolCard = ({
 };
 
 PoolCard.propTypes = {
-  token: PropTypes.string,
+  token: PropTypes.string.isRequired,
   verified: PropTypes.bool,
   apr: PropTypes.string,
-  approved: PropTypes.bool,
   tokenEarnings: PropTypes.any,
   canUnstake: PropTypes.bool,
+  approved: PropTypes.bool,
   onEnable: PropTypes.func,
+  onStake: PropTypes.func,
+  onUnstake: PropTypes.func,
 };
 
 PoolCard.defaultProps = {
-  token: MNGO,
   verified: false,
   apr: null,
-  approved: false,
   tokenEarnings: [],
   canUnstake: false,
+  approved: false,
   onEnable: () => {},
+  onStake: () => {},
+  onUnstake: () => {},
 };
 
 export default PoolCard;

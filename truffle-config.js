@@ -1,5 +1,4 @@
-require('dotenv').config();
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require('truffle-hdwallet-provider');
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -46,9 +45,9 @@ module.exports = {
     // options below to some value.
     //
     development: {
-     host: "127.0.0.1",     // Localhost (default: none)
-     port: 8545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
+      host: '127.0.0.1', // Localhost (default: none)
+      port: 7545, // Standard Ethereum port (default: none)
+      network_id: '*', // Any network (default: none)
     },
     // Another network with more advanced options...
     // advanced: {
@@ -69,10 +68,10 @@ module.exports = {
     // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
-    "ropsten-infura": {
-			provider: () => new HDWalletProvider(process.env.TEST_MNEMONIC, "https://ropsten.infura.io/v3/"+process.env.INFURA_KEY, 0),
-			network_id: 3
-		}
+    'ropsten-infura': {
+      provider: () => new HDWalletProvider(process.env.TEST_MNEMONIC, `https://ropsten.infura.io/v3/${process.env.INFURA_KEY}`, 0),
+      network_id: 3,
+    },
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
@@ -90,7 +89,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.12",       // Fetch exact version from solc-bin (default: truffle's version)
+      version: '0.6.12', // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
@@ -99,6 +98,6 @@ module.exports = {
       //  },
       //  evmVersion: "byzantium"
       // }
-    }
-  }
+    },
+  },
 };

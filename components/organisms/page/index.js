@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from 'react-bootstrap';
 
-import PageContent from '../../atoms/page-content';
+import PageContent from 'components/atoms/page-content';
 
-import Sidebar from '../sidebar';
+import Sidebar from 'components/organisms/sidebar';
 
 import * as Styles from './styles';
 

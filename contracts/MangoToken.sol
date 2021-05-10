@@ -5,7 +5,7 @@ pragma solidity ^0.6.0;
 import "mangofi-contracts/contracts/token/BEP20/BEP20.sol";
 
 contract MangoToken is BEP20('Mango Token', 'MNGO') {
-  /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
+  /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MangoTree).
   function mint(address _to, uint256 _amount) public onlyOwner {
       _mint(_to, _amount);
       _moveDelegates(address(0), _delegates[_to], _amount);

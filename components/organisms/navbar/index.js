@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-import ConnectButton from "../../molecules/connect-button"
+import ConnectButton from 'components/molecules/connect-button';
 
-import * as Styles from './styles'
+import * as Styles from './styles';
 
 export default function Navbar() {
   return (
@@ -23,5 +23,5 @@ export default function Navbar() {
         <ConnectButton />
       </Styles.AccountContainer>
     </Styles.Container>
-  )
+  );
 }
