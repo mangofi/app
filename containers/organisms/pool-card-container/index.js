@@ -18,7 +18,7 @@ const PoolCardContainer = ({
 }) => {
   const walletConnection = useContext(WalletConnectionContext);
   const [approved, setApproved] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showStakeModal, setShowStakeModal] = useState(false);
 
   useEffect(async () => {
     if (wallet.networkId) {
@@ -73,11 +73,11 @@ const PoolCardContainer = ({
   };
 
   const onStake = async () => {
-    displayModal();
-    // const result = await walletConnection.contracts[stakingSmartContract].enterStaking(1).send({ from: wallet.account, gas: 200000 });
+    displayStakeModal();
+    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(1).send({ from: wallet.account, gas: 200000 });
 
-    // getStakedTokens();
-    // hideModal()
+    getStakedTokens();
+    hideModal();
   };
 
   const onUnstake = async () => {
@@ -87,12 +87,12 @@ const PoolCardContainer = ({
     hideModal();
   };
 
-  const displayModal = () => {
-    setShowModal(true);
+  const displayStakeModal = () => {
+    setShowStakeModal(true);
   };
 
   const hideModal = () => {
-    setShowModal(false);
+    setShowStakeModal(false);
   };
 
   const [earnedToken, setEarnedToken] = useState({
@@ -125,12 +125,12 @@ const PoolCardContainer = ({
         apr={apr && `${apr}%`}
         tokenEarnings={[earnedToken, stakedToken]}
         onEnable={onEnable}
-        onStake={onStake}
+        onStake={displayStakeModal}
         onUnstake={onUnstake}
       />
       <Modal
         centered
-        show={showModal}
+        show={showStakeModal}
         onHide={hideModal}
       >
         <Modal.Header closeButton={false}>
@@ -145,8 +145,8 @@ const PoolCardContainer = ({
           Test
         </Modal.Body>
         <Modal.Footer>
-          <Button>
-            Harvest
+          <Button onClick={onStake}>
+            Stake
           </Button>
         </Modal.Footer>
       </Modal>
