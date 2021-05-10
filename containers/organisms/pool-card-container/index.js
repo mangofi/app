@@ -3,6 +3,11 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
+import Button from 'components/atoms/button';
+import CloseButton from 'components/atoms/close-button';
+
+import Modal from 'components/molecules/modal';
+
 import PoolCard from 'components/organisms/pool-card';
 
 import connector from 'lib/connector';
@@ -13,42 +18,51 @@ const PoolCardContainer = ({
 }) => {
   const walletConnection = useContext(WalletConnectionContext);
   const [approved, setApproved] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(async () => {
-    checkTokenAllowance();
-    getEarnedTokens();
-    getStakedTokens();
+    if (wallet.networkId) {
+      await checkTokenAllowance();
+
+      if (wallet.account) {
+        await getEarnedTokens();
+        await getStakedTokens();
+      }
+    }
   }, [wallet.networkId, wallet.account]);
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
-      const result = await walletConnection.contracts[smartContract].allowance(wallet.account, walletConnection.contracts[stakingSmartContract].address).call();
+      const allowance = await walletConnection.contracts[smartContract].allowance(wallet.account, walletConnection.contracts[stakingSmartContract].address).call();
 
-      setApproved(result > 0);
+      setApproved(allowance > 0);
     }
   };
 
   const getEarnedTokens = async () => {
     if (walletConnection.contracts[smartContract]) {
       const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
-
       const earnings = parseFloat(result);
-      setStakedToken({
-        ...stakedToken,
+
+      setStakedToken((prevState) => ({
+        ...prevState,
+        disabled: approved && earnings > 0,
         earnings,
-      });
+      }));
     }
   };
 
   const getStakedTokens = async () => {
     if (walletConnection.contracts[smartContract]) {
       const result = await walletConnection.contracts[stakingSmartContract].userInfo(0, wallet.account).call();
+      const poolStaking = result[poolId];
 
-      setStakedToken({
-        ...stakedToken,
-        earnings: result[poolId],
-        empty: parseFloat(result[poolId]) === 0,
-      });
+      setStakedToken((prevState) => ({
+        ...prevState,
+        disabled: false,
+        earnings: poolStaking,
+        empty: parseFloat(poolStaking) === 0,
+      }));
     }
   };
 
@@ -59,19 +73,31 @@ const PoolCardContainer = ({
   };
 
   const onStake = async () => {
-    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(1).send({ from: wallet.account, gas: 200000 });
+    displayModal();
+    // const result = await walletConnection.contracts[stakingSmartContract].enterStaking(1).send({ from: wallet.account, gas: 200000 });
 
-    getStakedTokens();
+    // getStakedTokens();
+    // hideModal()
   };
 
   const onUnstake = async () => {
     const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(1).send({ from: wallet.account, gas: 200000 });
 
     getStakedTokens();
+    hideModal();
+  };
+
+  const displayModal = () => {
+    setShowModal(true);
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
   };
 
   const [earnedToken, setEarnedToken] = useState({
     earnings: 0.0,
+    disabled: !approved,
     usdEarnings: '~0.000',
     empty: false,
     token,
@@ -79,6 +105,7 @@ const PoolCardContainer = ({
   });
   const [stakedToken, setStakedToken] = useState({
     earnings: 0.0,
+    disabled: !approved,
     usdEarnings: '~0.000',
     empty: true,
     token,
@@ -88,18 +115,42 @@ const PoolCardContainer = ({
   const [apr, setApr] = useState(null);
 
   return (
-    <PoolCard
-      approved={approved}
-      canUnstake={stakedToken.earnings > 0}
-      token={token}
-      smartContract={smartContract}
-      verified={verified}
-      apr={apr && `${apr}%`}
-      tokenEarnings={[earnedToken, stakedToken]}
-      onEnable={onEnable}
-      onStake={onStake}
-      onUnstake={onUnstake}
-    />
+    <>
+      <PoolCard
+        approved={approved}
+        canUnstake={stakedToken.earnings > 0}
+        token={token}
+        smartContract={smartContract}
+        verified={verified}
+        apr={apr && `${apr}%`}
+        tokenEarnings={[earnedToken, stakedToken]}
+        onEnable={onEnable}
+        onStake={onStake}
+        onUnstake={onUnstake}
+      />
+      <Modal
+        centered
+        show={showModal}
+        onHide={hideModal}
+      >
+        <Modal.Header closeButton={false}>
+          <Modal.Title as="h5">
+            Stake
+            {' '}
+            {token}
+          </Modal.Title>
+          <CloseButton onClick={hideModal} />
+        </Modal.Header>
+        <Modal.Body>
+          Test
+        </Modal.Body>
+        <Modal.Footer>
+          <Button>
+            Harvest
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 

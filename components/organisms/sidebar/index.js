@@ -57,22 +57,24 @@ const Sidebar = ({ currentPage }) => (
     <ul className="list-inline">
       <li className="list-inline-item">
         <Link href="#" passHref>
-          <a>
+          <Styles.SmallLink>
             <small>Privacy</small>
-          </a>
+          </Styles.SmallLink>
         </Link>
       </li>
       <li className="list-inline-item">
         <Link href="#" passHref>
-          <a><small>Terms</small></a>
+          <Styles.SmallLink><small>Terms</small></Styles.SmallLink>
         </Link>
       </li>
       <li className="list-inline-item">
-        <small>
-          mangoFi ©
-          {' '}
-          {new Date().getFullYear()}
-        </small>
+        <Styles.SmallLink>
+          <small>
+            mangoFi ©
+            {' '}
+            {new Date().getFullYear()}
+          </small>
+        </Styles.SmallLink>
       </li>
     </ul>
   </Styles.Container>

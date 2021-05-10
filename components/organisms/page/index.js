@@ -9,7 +9,7 @@ import Sidebar from 'components/organisms/sidebar';
 import * as Styles from './styles';
 
 const Page = ({ children, currentPage }) => (
-  <Container fluid className="p-0 w-100 pt-3">
+  <Container className="p-0 w-100 pt-3">
     <Styles.Content>
       <Sidebar currentPage={currentPage} />
       <PageContent>

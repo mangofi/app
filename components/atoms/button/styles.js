@@ -18,7 +18,7 @@ export const Container = styled(Button)`
   ${({ secondary }) => {
     if (secondary) {
       return `
-        background-color: var(--primary100);
+        background-color: #2A1E16;
         color: var(--primary500);
       `;
     }
@@ -59,7 +59,7 @@ export const Container = styled(Button)`
     ${({ secondary }) => {
     if (secondary) {
       return `
-          background-color: var(--primary200) !important;
+          background-color: #773E18 !important;
           color: var(--primary500);
         `;
     }
@@ -69,12 +69,12 @@ export const Container = styled(Button)`
   }
   
   &:disabled {
-    background-color: var(--black200) !important;
+    background-color: var(--black700) !important;
     border: none;
     -webkit-box-shadow: none;
     -moz-box-shadow:    none;
     box-shadow:         none;
-    color: var(--black400) !important;
+    color: var(--black600) !important;
     cursor: auto;
   }
 `;

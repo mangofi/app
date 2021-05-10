@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 import { WalletConnectionProvider } from '../lib/wallet-connection';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.scss';
 
 function MangofiApp({ Component, pageProps }) {

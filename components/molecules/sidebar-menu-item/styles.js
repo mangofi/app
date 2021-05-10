@@ -7,7 +7,7 @@ export const Container = styled.li`
 export const Link = styled.a`
   border-radius: 100px;
   color: ${({ active, small }) => {
-    const initialColor = small ? 'var(--black600)' : 'var(--black700)';
+    const initialColor = small ? 'var(--black400)' : 'var(--black100)';
 
     return active ? 'var(--primary500)' : initialColor;
   }};
@@ -23,13 +23,13 @@ export const Link = styled.a`
   }
   
   &:hover {
-    background-color: ${({ disabled }) => (disabled ? 'transparent' : 'var(--primary100)')};
+    background-color: ${({ disabled }) => (disabled ? 'transparent' : '#2A1E16')};
   }
   
   &:hover, &:active {
     color: ${({ disabled }) => {
     if (disabled) {
-      return 'var(--black700)';
+      return 'var(--black300)';
     }
 
     return 'var(--primary500)';

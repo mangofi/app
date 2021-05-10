@@ -11,3 +11,11 @@ export const Container = styled.div`
 export const StyledLogo = styled(Logo)`
   margin-bottom: 22px;
 `;
+
+export const SmallLink = styled.a`
+  color: var(--black500);
+  
+  & small {
+    color: var(--black500);
+  }
+`;
