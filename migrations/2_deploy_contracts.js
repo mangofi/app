@@ -5,8 +5,8 @@ const MangoTree = artifacts.require('MangoTree');
 const MANGO_PER_BLOCK = 1;
 
 module.exports = async (deployer, networks, accounts) => {
-  const mangoToken = await deployer.deploy(MangoToken, { overwrite: false });
-  const saltToken = await deployer.deploy(SaltToken, MangoToken.address, { overwrite: false });
+  const mangoToken = await deployer.deploy(MangoToken);
+  const saltToken = await deployer.deploy(SaltToken, MangoToken.address);
 
   const owner = accounts[0];
   const block = await web3.eth.getBlock('latest');
@@ -19,6 +19,4 @@ module.exports = async (deployer, networks, accounts) => {
     MANGO_PER_BLOCK,
     block.number,
   );
-  mangoToken.transferOwnership.sendTransaction(mangoTree.address);
-  saltToken.transferOwnership.sendTransaction(mangoTree.address);
 };
