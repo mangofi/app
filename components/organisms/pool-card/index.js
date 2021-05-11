@@ -42,7 +42,13 @@ const PoolCard = ({
   const stakeTitle = useMemo(() => (canUnstake ? 'Unstake' : `Stake ${token}`), [canUnstake]);
 
   const renderEarnings = useCallback(() => tokenEarnings.map(({
-    earnings, usdEarnings, token: earningsToken, empty, staked, onClick, disabled,
+    earnings,
+    usdEarnings,
+    token: earningsToken,
+    empty,
+    staked,
+    onTokenBalanceClick = () => {},
+    disabled,
   }) => (
     <TokenBalance
       title={`${earningsToken} ${staked ? 'Staked' : 'Earned'}`}
@@ -52,7 +58,7 @@ const PoolCard = ({
           secondary={!staked}
           flat
           disabled={disabled}
-          onClick={onClick}
+          onClick={onTokenBalanceClick}
         >
           {staked ? 'Stake' : 'Collect'}
         </Button>,

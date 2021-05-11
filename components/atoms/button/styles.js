@@ -12,7 +12,7 @@ export const Container = styled(Button)`
   font-size: 14px;
   height: 42px;
   line-height: 24px;
-  min-width: ${({ fixedWidth }) => (fixedWidth ? '100px' : 'auto')};
+  min-width: ${({ fixedWidth }) => (fixedWidth ? `${fixedWidth}px` : 'auto')};
   padding: 8px 28px;
   
   ${({ secondary }) => {
@@ -52,6 +52,17 @@ export const Container = styled(Button)`
     return null;
   }}
   
+  ${({ grayedOut }) => {
+    if (grayedOut) {
+      return `
+        background-color: var(--black700);
+        color: var(--black200);
+      `;
+    }
+
+    return null;
+  }}
+  
   &:hover, &:active, &:focus {
     background-color: var(--primary600) !important;
     border-color: var(--primary500) !important;
@@ -66,6 +77,17 @@ export const Container = styled(Button)`
 
     return null;
   }}
+    
+    ${({ grayedOut }) => {
+    if (grayedOut) {
+      return `
+          background-color: var(--black600) !important;
+          color: var(--black200);
+        `;
+    }
+
+    return null;
+  }}
   }
   
   &:disabled {
@@ -74,7 +96,7 @@ export const Container = styled(Button)`
     -webkit-box-shadow: none;
     -moz-box-shadow:    none;
     box-shadow:         none;
-    color: var(--black600) !important;
+    color: ${({ grayedOut }) => { grayedOut ? 'var(--black200)' : 'var(--black600)'; }} !important;
     cursor: auto;
   }
 `;

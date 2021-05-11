@@ -9,6 +9,7 @@ import CloseButton from 'components/atoms/close-button';
 import Modal from 'components/molecules/modal';
 
 import PoolCard from 'components/organisms/pool-card';
+import StakeTokenModal from 'components/organisms/stake-token-modal';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
@@ -17,19 +18,10 @@ const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId,
 }) => {
   const walletConnection = useContext(WalletConnectionContext);
+  const [apr, setApr] = useState(null);
   const [approved, setApproved] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
-
-  useEffect(async () => {
-    if (wallet.networkId) {
-      await checkTokenAllowance();
-
-      if (wallet.account) {
-        await getEarnedTokens();
-        await getStakedTokens();
-      }
-    }
-  }, [wallet.networkId, wallet.account]);
+  const [balance, setBalance] = useState(0);
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
@@ -75,19 +67,24 @@ const PoolCardContainer = ({
     setApproved(result.status);
   };
 
-  const onStake = async () => {
-    displayStakeModal();
-    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(1).send({ from: wallet.account, gas: 200000 });
+  const onStake = async (amount) => {
+    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(amount).send({ from: wallet.account, gas: 200000 });
 
     getStakedTokens();
     hideModal();
   };
 
-  const onUnstake = async () => {
-    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(1).send({ from: wallet.account, gas: 200000 });
+  const onUnstake = async (amount) => {
+    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(amount).send({ from: wallet.account, gas: 200000 });
 
     getStakedTokens();
     hideModal();
+  };
+
+  const getBalance = async () => {
+    const result = await walletConnection.contracts[smartContract].balanceOf(wallet.account).call();
+
+    setBalance(result);
   };
 
   const displayStakeModal = () => {
@@ -105,6 +102,7 @@ const PoolCardContainer = ({
     empty: false,
     token,
     stake: false,
+    onTokenBalanceClick: () => { console.log('TODO: Collect'); },
   });
   const [stakedToken, setStakedToken] = useState({
     earnings: 0.0,
@@ -113,9 +111,20 @@ const PoolCardContainer = ({
     empty: true,
     token,
     staked: true,
-    onClick: onStake,
+    onTokenBalanceClick: displayStakeModal,
   });
-  const [apr, setApr] = useState(null);
+
+  useEffect(async () => {
+    if (wallet.networkId) {
+      await checkTokenAllowance();
+
+      if (wallet.account) {
+        await getEarnedTokens();
+        await getStakedTokens();
+        await getBalance();
+      }
+    }
+  }, [wallet.networkId, wallet.account]);
 
   return (
     <>
@@ -128,31 +137,17 @@ const PoolCardContainer = ({
         apr={apr && `${apr}%`}
         tokenEarnings={[earnedToken, stakedToken]}
         onEnable={onEnable}
-        onStake={displayStakeModal}
+        onStake={onStake}
         onUnstake={onUnstake}
       />
-      <Modal
-        centered
+      <StakeTokenModal
+        balance={balance}
+        token={token}
         show={showStakeModal}
         onHide={hideModal}
-      >
-        <Modal.Header closeButton={false}>
-          <Modal.Title as="h5">
-            Stake
-            {' '}
-            {token}
-          </Modal.Title>
-          <CloseButton onClick={hideModal} />
-        </Modal.Header>
-        <Modal.Body>
-          Test
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={onStake}>
-            Stake
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        onStake={onStake}
+        onBuy={() => console.log('TODO: onBuy')}
+      />
     </>
   );
 };

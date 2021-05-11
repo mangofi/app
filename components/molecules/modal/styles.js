@@ -15,6 +15,7 @@ export const StyledModal = styled(Modal)`
   
   & .modal-body {
     padding: 24px;
+    padding-top: 0;
   }
   
   & .modal-footer {
