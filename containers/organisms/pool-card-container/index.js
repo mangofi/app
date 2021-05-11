@@ -137,7 +137,7 @@ const PoolCardContainer = ({
         apr={apr && `${apr}%`}
         tokenEarnings={[earnedToken, stakedToken]}
         onEnable={onEnable}
-        onStake={onStake}
+        onStake={displayStakeModal}
         onUnstake={onUnstake}
       />
       <StakeTokenModal
