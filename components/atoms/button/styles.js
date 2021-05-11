@@ -88,6 +88,16 @@ export const Container = styled(Button)`
 
     return null;
   }}
+  
+  ${({ disabled }) => {
+    if (disabled) {
+      return `
+        color: var(--black200);
+      `;
+    }
+
+    return null;
+  }}
   }
   
   &:disabled {
