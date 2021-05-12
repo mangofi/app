@@ -1,5 +1,5 @@
 import React, {
-  useContext, useCallback, useEffect, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,6 +13,8 @@ import StakeTokenModal from 'components/organisms/stake-token-modal';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
+
+import { asToken } from 'utils/number';
 
 const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId,

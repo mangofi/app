@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
+import { MANGO_TOKEN } from 'lib/smart-contracts';
+
+import { asToken } from 'utils/number';
 
 import * as Styles from './styles';
 
@@ -9,12 +12,27 @@ function ConnectButton({ wallet, walletActions }) {
   const {
     account,
     signedIn,
+    balance,
   } = wallet;
   const walletConnection = useContext(WalletConnectionContext);
 
   const onConnect = async () => {
     await walletConnection.connect();
   };
+
+  const loadBalance = async () => {
+    if (walletConnection.contracts[MANGO_TOKEN]) {
+      const result = await walletConnection.contracts[MANGO_TOKEN].balanceOf(wallet.account).call();
+
+      walletActions.setBalance(result.toString());
+    }
+  };
+
+  useEffect(() => {
+    if (wallet.account) {
+      loadBalance();
+    }
+  }, [wallet.networkId, wallet.account]);
 
   return (
     <Styles.Container>
@@ -28,7 +46,7 @@ function ConnectButton({ wallet, walletActions }) {
               {account.slice(-4)}
             </Styles.AccountNumber>
             <div>
-              <strong>10,472.0000</strong>
+              <strong>{asToken(balance)}</strong>
               {' '}
               <small>MNGO</small>
             </div>

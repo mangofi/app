@@ -6,6 +6,9 @@ import Input from 'components/atoms/input';
 import CloseButton from 'components/atoms/close-button';
 
 import Modal from 'components/molecules/modal';
+import MangoSlider from 'components/molecules/mango-slider';
+
+import { div, add } from 'utils/number';
 
 import * as Styles from './styles';
 
@@ -39,6 +42,26 @@ const StakeTokenModal = ({
   const onInputChange = (event) => {
     setInvalidAmount(false);
     setAmountToStake(sanitizeAmount(event.target.value));
+  };
+
+  const onSliderChange = (value) => {
+    switch (value) {
+      case 0:
+        setAmountToStake(0);
+        break;
+      case 0.25:
+        setAmountToStake(div(balance, 3));
+        break;
+      case 0.50:
+        setAmountToStake(div(balance, 2));
+        break;
+      case 0.75:
+        setAmountToStake(add(div(balance, 2), div(balance, 3)));
+        break;
+      case 1:
+        setAmountToStake(balance);
+        break;
+    }
   };
 
   useEffect(() => {
@@ -79,7 +102,8 @@ const StakeTokenModal = ({
             size="lg"
           />
         </div>
-        <div className="mt-3">
+        <MangoSlider className="mt-4" onChange={onSliderChange} />
+        <div className="mt-2">
           You will need
           {' '}
           {token}

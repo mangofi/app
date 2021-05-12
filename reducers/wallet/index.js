@@ -11,7 +11,6 @@ export default function Web3(state = initialState, action) {
         ...state,
         ...action.payload,
       };
-      break;
     default:
       return {
         ...state,

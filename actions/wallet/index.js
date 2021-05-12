@@ -25,7 +25,13 @@ export function setNetworkId(networkId) {
   };
 }
 
-export default {
-  setAccount,
-  setNetworkId,
-};
+export function setBalance(balance) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_ACCOUNT,
+      payload: {
+        balance,
+      },
+    });
+  };
+}
