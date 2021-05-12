@@ -58,9 +58,8 @@ const StakeTokenModal = ({
       case 0.75:
         setAmountToStake(add(div(balance, 2), div(balance, 3)));
         break;
-      case 1:
+      default:
         setAmountToStake(balance);
-        break;
     }
   };
 

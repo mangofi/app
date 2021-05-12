@@ -70,20 +70,25 @@ const PoolCardContainer = ({
   };
 
   const onStake = async (amount) => {
-    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(amount).send({ from: wallet.account, gas: 200000 });
+    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(amount).send({
+      from: wallet.account,
+    });
 
     getStakedTokens();
     hideModal();
   };
 
   const onUnstake = async (amount) => {
-    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(amount).send({ from: wallet.account, gas: 200000 });
+    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(amount).send({
+      from: wallet.account,
+    });
 
     getStakedTokens();
     hideModal();
   };
 
   const getBalance = async () => {
+    if (!walletConnection.contracts[smartContract]) return;
     const result = await walletConnection.contracts[smartContract].balanceOf(wallet.account).call();
 
     setBalance(result);

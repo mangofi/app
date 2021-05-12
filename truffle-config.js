@@ -81,7 +81,9 @@ module.exports = {
         providerOrUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       }),
       network_id: '97',
+      websocket: true,
       timeoutBlocks: 50000,
+      networkCheckTimeout: 1000000,
     },
     bscMainnet: {
       provider: () => new HDWalletProvider({
