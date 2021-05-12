@@ -22,9 +22,9 @@ const Home = () => (
     </div>
     <div>
       <PoolCardContainer
-        token={MNGO}
         smartContract={MANGO_TOKEN}
         stakingSmartContract={MANGO_TREE}
+        token={MNGO}
         verified
       />
     </div>

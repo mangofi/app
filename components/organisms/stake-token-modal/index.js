@@ -104,7 +104,7 @@ const StakeTokenModal = ({
             size="lg"
           />
         </div>
-        <MangoSlider className="mt-4" onChange={onSliderChange} />
+        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} />
         <div className="mt-2">
           You will need
           {' '}
