@@ -15,7 +15,7 @@ import * as Styles from './styles';
 const StakeTokenModal = ({
   token, show, onHide, onStake, onBuy, balance,
 }) => {
-  const [amountToStake, setAmountToStake] = useState(0);
+  const [amountToStake, setAmountToStake] = useState('');
   const [invalidAmount, setInvalidAmount] = useState(false);
 
   const sanitizeAmount = (value) => {
@@ -64,7 +64,10 @@ const StakeTokenModal = ({
   };
 
   useEffect(() => {
-    if (show) setAmountToStake('');
+    if (show) {
+      setAmountToStake('');
+      setInvalidAmount(false);
+    }
   }, [show]);
 
   return (
