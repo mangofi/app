@@ -11,17 +11,14 @@ const MangoSlider = ({ className, onChange }) => {
     onChange(value);
   };
 
-  const renderMangoHandle = (props) => {
-    console.log(props);
-    return (
-      <Styles.MangoHandle {...props}>
-        <img src="/img/mango-solid.svg" />
-        <Styles.ValueLabel>
-          {`${props['aria-valuenow'] * 100}%`}
-        </Styles.ValueLabel>
-      </Styles.MangoHandle>
-    );
-  };
+  const renderMangoHandle = (props) => (
+    <Styles.MangoHandle {...props}>
+      <img src="/img/mango-solid.svg" />
+      <Styles.ValueLabel>
+        {`${props['aria-valuenow'] * 100}%`}
+      </Styles.ValueLabel>
+    </Styles.MangoHandle>
+  );
 
   return (
     <Styles.Container className={className}>

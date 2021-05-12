@@ -4,6 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { FaSpinner } from 'react-icons/fa';
 
 import Button from 'components/atoms/button';
 import { TokenBalance } from 'components/atoms/card';
@@ -13,7 +14,7 @@ import Coin from 'components/molecules/coin';
 import * as Styles from './styles';
 
 const PoolCard = ({
-  token, verified, apr, tokenEarnings, canUnstake, approved, onEnable, onStake, onUnstake,
+  loading, token, verified, apr, tokenEarnings, canUnstake, approved, onEnable, onStake, onUnstake,
 }) => {
   const renderVerified = useCallback(() => {
     if (verified) {
@@ -54,7 +55,7 @@ const PoolCard = ({
       title={`${earningsToken} ${staked ? 'Staked' : 'Earned'}`}
       actions={!empty && [
         <Button
-          fixedWidth
+          fixedWidth={104}
           secondary={!staked}
           flat
           disabled={disabled}
@@ -87,9 +88,15 @@ const PoolCard = ({
           {renderEarnings()}
         </Styles.EarningsContainer>
         <div>
-          <Button flat secondary={approved && canUnstake} block onClick={approved ? (canUnstake ? onUnstake : onStake) : onEnable}>
-            {approved ? stakeTitle : 'Enable'}
-          </Button>
+          {approved ? (
+            <Button flat secondary={canUnstake} block onClick={canUnstake ? onUnstake : onStake}>
+              {stakeTitle}
+            </Button>
+          ) : (
+            <Button disabled={loading} flat block onClick={onEnable} icon={loading ? <FaSpinner icon="spinner" className="spinner" /> : null}>
+              Enable
+            </Button>
+          )}
         </div>
       </div>
     </Styles.StyledCard>
@@ -97,6 +104,7 @@ const PoolCard = ({
 };
 
 PoolCard.propTypes = {
+  loading: PropTypes.bool,
   token: PropTypes.string.isRequired,
   verified: PropTypes.bool,
   apr: PropTypes.string,
@@ -109,6 +117,7 @@ PoolCard.propTypes = {
 };
 
 PoolCard.defaultProps = {
+  loading: false,
   verified: false,
   apr: null,
   tokenEarnings: [],

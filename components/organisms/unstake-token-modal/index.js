@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { FaSpinner } from 'react-icons/fa';
 
 import Button from 'components/atoms/button';
 import Input from 'components/atoms/input';
@@ -13,7 +14,7 @@ import { div, add } from 'utils/number';
 import * as Styles from './styles';
 
 const UnstakeTokenModal = ({
-  token, show, onHide, onUnstake, balance,
+  token, show, onHide, onUnstake, balance, loading,
 }) => {
   const [amountToUnstake, setAmountToUnstake] = useState('');
   const [invalidAmount, setInvalidAmount] = useState(false);
@@ -32,6 +33,8 @@ const UnstakeTokenModal = ({
   };
 
   const onUnstakeClick = () => {
+    if (loading) return;
+
     if (amountToUnstake > 0) {
       onUnstake(amountToUnstake.toString());
     } else {
@@ -116,7 +119,7 @@ const UnstakeTokenModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button disabled={amountToUnstake == 0} flat fixedWidth={138} onClick={onUnstakeClick}>
+          <Button disabled={amountToUnstake == 0 || loading} flat fixedWidth={138} onClick={onUnstakeClick} icon={loading ? <FaSpinner icon="spinner" className="spinner" /> : null}>
             Unstake
           </Button>
         </div>
@@ -126,17 +129,19 @@ const UnstakeTokenModal = ({
 };
 
 UnstakeTokenModal.propTypes = {
-  token: PropTypes.string.isRequired,
   balance: PropTypes.string,
+  loading: PropTypes.bool,
   show: PropTypes.bool,
+  token: PropTypes.string.isRequired,
   onHide: PropTypes.func,
   onUnstake: PropTypes.func,
   onBuy: PropTypes.func,
 };
 
 UnstakeTokenModal.defaultProps = {
-  show: false,
   balance: '0.000',
+  loading: false,
+  show: false,
   onHide: () => {},
   onUnstake: () => {},
   onBuy: () => {},

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { FaSpinner } from 'react-icons/fa';
 
 import Button from 'components/atoms/button';
 import Input from 'components/atoms/input';
@@ -13,7 +14,7 @@ import { div, add } from 'utils/number';
 import * as Styles from './styles';
 
 const StakeTokenModal = ({
-  token, show, onHide, onStake, onBuy, balance,
+  token, show, onHide, onStake, onBuy, balance, loading,
 }) => {
   const [amountToStake, setAmountToStake] = useState('');
   const [invalidAmount, setInvalidAmount] = useState(false);
@@ -32,6 +33,8 @@ const StakeTokenModal = ({
   };
 
   const onStakeClick = () => {
+    if (loading) return;
+
     if (amountToStake > 0) {
       onStake(amountToStake.toString());
     } else {
@@ -129,7 +132,7 @@ const StakeTokenModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button flat fixedWidth={138} onClick={onStakeClick}>
+          <Button disabled={loading} flat fixedWidth={138} onClick={onStakeClick} icon={loading ? <FaSpinner icon="spinner" className="spinner" /> : null}>
             Stake
           </Button>
         </div>
@@ -139,17 +142,19 @@ const StakeTokenModal = ({
 };
 
 StakeTokenModal.propTypes = {
-  token: PropTypes.string.isRequired,
   balance: PropTypes.string,
+  loading: PropTypes.bool,
   show: PropTypes.bool,
+  token: PropTypes.string.isRequired,
   onHide: PropTypes.func,
   onStake: PropTypes.func,
   onBuy: PropTypes.func,
 };
 
 StakeTokenModal.defaultProps = {
-  show: false,
   balance: '0.000',
+  loading: false,
+  show: false,
   onHide: () => {},
   onStake: () => {},
   onBuy: () => {},

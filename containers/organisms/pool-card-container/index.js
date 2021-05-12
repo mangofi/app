@@ -26,6 +26,9 @@ const PoolCardContainer = ({
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [loadingStaking, setLoadingStaking] = useState(false);
+  const [loadingUnstaking, setLoadingUnstaking] = useState(false);
+  const [loadingApprove, setLoadingApprove] = useState(false);
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
@@ -66,27 +69,40 @@ const PoolCardContainer = ({
   };
 
   const onEnable = async () => {
-    const result = await walletConnection.contracts[smartContract].approve(walletConnection.contracts[stakingSmartContract].address, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({ from: wallet.account });
+    setLoadingApprove(true);
+    const result = await walletConnection.contracts[smartContract].approve(walletConnection.contracts[stakingSmartContract].address, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({ from: wallet.account }).on('receipt', () => {
+      setApproved(result.status);
+    }).catch((e) => {
+      console.error(e);
+    });
 
-    setApproved(result.status);
+    setLoadingApprove(false);
   };
 
   const onStake = async (amount) => {
+    setLoadingStaking(true);
     const result = await walletConnection.contracts[stakingSmartContract].enterStaking(amount).send({
       from: wallet.account,
+    }).on('receipt', () => {
+      getStakedTokens();
+      hideStakeModal();
+    }).catch((e) => {
+      console.error(e);
     });
-
-    getStakedTokens();
-    hideStakeModal();
+    setLoadingStaking(false);
   };
 
   const onUnstake = async (amount) => {
+    setLoadingUnstaking(true);
     const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(amount).send({
       from: wallet.account,
+    }).on('receipt', () => {
+      getStakedTokens();
+      hideUnstakeModal();
+    }).catch((e) => {
+      console.error(e);
     });
-
-    getStakedTokens();
-    hideUnstakeModal();
+    setLoadingUnstaking(false);
   };
 
   const getBalance = async () => {
@@ -97,6 +113,7 @@ const PoolCardContainer = ({
   };
 
   const displayStakeModal = () => {
+    setLoadingStaking(false);
     setShowStakeModal(true);
   };
 
@@ -105,6 +122,7 @@ const PoolCardContainer = ({
   };
 
   const displayUnstakeModal = () => {
+    setLoadingUnstaking(false);
     setShowUnstakeModal(true);
   };
 
@@ -148,6 +166,7 @@ const PoolCardContainer = ({
       <PoolCard
         approved={approved}
         canUnstake={stakedToken.earnings > 0}
+        loading={loadingApprove}
         token={token}
         smartContract={smartContract}
         verified={verified}
@@ -159,6 +178,7 @@ const PoolCardContainer = ({
       />
       <StakeTokenModal
         balance={balance}
+        loading={loadingStaking}
         token={token}
         show={showStakeModal}
         onHide={hideStakeModal}
@@ -167,6 +187,7 @@ const PoolCardContainer = ({
       />
       <UnstakeTokenModal
         balance={balance}
+        loading={loadingUnstaking}
         token={token}
         show={showUnstakeModal}
         onHide={hideUnstakeModal}

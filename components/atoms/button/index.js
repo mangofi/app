@@ -16,23 +16,23 @@ const Button = ({
 Button.propTypes = {
   children: PropTypes.element,
   className: PropTypes.string,
-  small: PropTypes.bool,
-  secondary: PropTypes.bool,
   flat: PropTypes.bool,
   fixedWidth: PropTypes.number,
   grayedOut: PropTypes.bool,
   icon: PropTypes.element,
+  small: PropTypes.bool,
+  secondary: PropTypes.bool,
 };
 
 Button.defaultProps = {
   children: null,
   className: null,
-  small: false,
-  secondary: false,
   flat: false,
   fixedWidth: null,
   grayedOut: false,
   icon: null,
+  small: false,
+  secondary: false,
 };
 
 export default Button;
