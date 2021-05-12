@@ -10,6 +10,7 @@ import Modal from 'components/molecules/modal';
 
 import PoolCard from 'components/organisms/pool-card';
 import StakeTokenModal from 'components/organisms/stake-token-modal';
+import UnstakeTokenModal from 'components/organisms/unstake-token-modal';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
@@ -23,6 +24,7 @@ const PoolCardContainer = ({
   const [apr, setApr] = useState(null);
   const [approved, setApproved] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
+  const [showUnstakeModal, setShowUnstakeModal] = useState(false);
   const [balance, setBalance] = useState(0);
 
   const checkTokenAllowance = async () => {
@@ -75,7 +77,7 @@ const PoolCardContainer = ({
     });
 
     getStakedTokens();
-    hideModal();
+    hideStakeModal();
   };
 
   const onUnstake = async (amount) => {
@@ -84,7 +86,7 @@ const PoolCardContainer = ({
     });
 
     getStakedTokens();
-    hideModal();
+    hideUnstakeModal();
   };
 
   const getBalance = async () => {
@@ -98,8 +100,16 @@ const PoolCardContainer = ({
     setShowStakeModal(true);
   };
 
-  const hideModal = () => {
+  const hideStakeModal = () => {
     setShowStakeModal(false);
+  };
+
+  const displayUnstakeModal = () => {
+    setShowUnstakeModal(true);
+  };
+
+  const hideUnstakeModal = () => {
+    setShowUnstakeModal(false);
   };
 
   const [earnedToken, setEarnedToken] = useState({
@@ -145,15 +155,22 @@ const PoolCardContainer = ({
         tokenEarnings={[earnedToken, stakedToken]}
         onEnable={onEnable}
         onStake={displayStakeModal}
-        onUnstake={onUnstake}
+        onUnstake={displayUnstakeModal}
       />
       <StakeTokenModal
         balance={balance}
         token={token}
         show={showStakeModal}
-        onHide={hideModal}
+        onHide={hideStakeModal}
         onStake={onStake}
         onBuy={() => console.log('TODO: onBuy')}
+      />
+      <UnstakeTokenModal
+        balance={balance}
+        token={token}
+        show={showUnstakeModal}
+        onHide={hideUnstakeModal}
+        onUnstake={onUnstake}
       />
     </>
   );
