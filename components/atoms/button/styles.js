@@ -110,3 +110,18 @@ export const Container = styled(Button)`
     cursor: auto;
   }
 `;
+
+export const SpinnerContainer = styled.div`
+  display: inline-block;
+  transform: translateY(3px);
+  vertical-align: middle;
+
+  & svg {
+    color: #16b7fc !important;
+  }
+  
+  & .MuiCircularProgress-root {
+    height: 20px !important;
+    width: 20px !important;
+  }
+`;

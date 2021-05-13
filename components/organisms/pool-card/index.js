@@ -4,7 +4,6 @@ import React, {
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { FaSpinner } from 'react-icons/fa';
 
 import Button from 'components/atoms/button';
 import { TokenBalance } from 'components/atoms/card';
@@ -70,7 +69,7 @@ const PoolCard = ({
   )));
 
   return (
-    <Styles.StyledCard coin={<Coin name={token} />}>
+    <Styles.StyledCard coin={<Coin name={token} />} working={canUnstake}>
       <small className="d-flex flex-fill flex-row justify-content-end text-right">
         <a href="#">View details</a>
       </small>
@@ -93,7 +92,7 @@ const PoolCard = ({
               {stakeTitle}
             </Button>
           ) : (
-            <Button disabled={loading} flat block onClick={onEnable} icon={loading ? <FaSpinner icon="spinner" className="spinner" /> : null}>
+            <Button block flat loading={loading} onClick={!loading && onEnable}>
               Enable
             </Button>
           )}
@@ -108,7 +107,15 @@ PoolCard.propTypes = {
   token: PropTypes.string.isRequired,
   verified: PropTypes.bool,
   apr: PropTypes.string,
-  tokenEarnings: PropTypes.any,
+  tokenEarnings: PropTypes.shape({
+    earnings: PropTypes.string,
+    usdEarnings: PropTypes.string,
+    token: PropTypes.string,
+    empty: PropTypes.bool,
+    staked: PropTypes.bool,
+    onTokenBalanceClick: PropTypes.func,
+    disabled: PropTypes.bool,
+  }),
   canUnstake: PropTypes.bool,
   approved: PropTypes.bool,
   onEnable: PropTypes.func,

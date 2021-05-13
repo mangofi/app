@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FaSpinner } from 'react-icons/fa';
 
 import Button from 'components/atoms/button';
 import Input from 'components/atoms/input';
@@ -132,7 +131,7 @@ const StakeTokenModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button disabled={loading} flat fixedWidth={138} onClick={onStakeClick} icon={loading ? <FaSpinner icon="spinner" className="spinner" /> : null}>
+          <Button loading={loading} flat fixedWidth={138} onClick={!loading && onStakeClick}>
             Stake
           </Button>
         </div>
