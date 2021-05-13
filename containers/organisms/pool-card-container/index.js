@@ -15,8 +15,6 @@ import UnstakeTokenModal from 'components/organisms/unstake-token-modal';
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
 
-import { asToken } from 'utils/number';
-
 const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId,
 }) => {
@@ -32,25 +30,34 @@ const PoolCardContainer = ({
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
-      const allowance = await walletConnection.contracts[smartContract].allowance(
-        wallet.account,
-        walletConnection.contracts[stakingSmartContract].address,
-      ).call();
+      try {
+        const allowance = await walletConnection.contracts[smartContract].allowance(
+          wallet.account,
+          walletConnection.contracts[stakingSmartContract].address,
+        ).call();
 
-      setApproved(allowance > 0);
+        setApproved(allowance > 0);
+        setLoadingApprove(false);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
   const getEarnedTokens = async () => {
-    if (walletConnection.contracts[smartContract]) {
-      const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
-      const earnings = parseFloat(result);
+    if (walletConnection.contracts[stakingSmartContract]) {
+      try {
+        const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
+        const earnings = parseFloat(result);
 
-      setStakedToken((prevState) => ({
-        ...prevState,
-        disabled: approved && earnings > 0,
-        earnings,
-      }));
+        setEarnedToken((prevState) => ({
+          ...prevState,
+          disabled: !approved || earnings == 0,
+          earnings,
+        }));
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -70,6 +77,7 @@ const PoolCardContainer = ({
 
   const onEnable = async () => {
     setLoadingApprove(true);
+
     const result = await walletConnection.contracts[smartContract].approve(walletConnection.contracts[stakingSmartContract].address, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({ from: wallet.account }).on('receipt', () => {
       setApproved(result.status);
     }).catch((e) => {
@@ -81,6 +89,7 @@ const PoolCardContainer = ({
 
   const onStake = async (amount) => {
     setLoadingStaking(true);
+
     const result = await walletConnection.contracts[stakingSmartContract].enterStaking(amount).send({
       from: wallet.account,
     }).on('receipt', () => {
@@ -89,11 +98,13 @@ const PoolCardContainer = ({
     }).catch((e) => {
       console.error(e);
     });
+
     setLoadingStaking(false);
   };
 
   const onUnstake = async (amount) => {
     setLoadingUnstaking(true);
+
     const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(amount).send({
       from: wallet.account,
     }).on('receipt', () => {
@@ -102,14 +113,20 @@ const PoolCardContainer = ({
     }).catch((e) => {
       console.error(e);
     });
+
     setLoadingUnstaking(false);
   };
 
   const getBalance = async () => {
     if (!walletConnection.contracts[smartContract]) return;
-    const result = await walletConnection.contracts[smartContract].balanceOf(wallet.account).call();
 
-    setBalance(result);
+    try {
+      const result = await walletConnection.contracts[smartContract].balanceOf(wallet.account).call();
+
+      setBalance(result);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const displayStakeModal = () => {
@@ -160,6 +177,15 @@ const PoolCardContainer = ({
       }
     }
   }, [wallet.networkId, wallet.account]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (wallet.networkId && wallet.account) {
+        await getEarnedTokens();
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
