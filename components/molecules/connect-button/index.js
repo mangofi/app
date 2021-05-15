@@ -1,5 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 
+import { MNGO } from 'components/molecules/coin/constants';
+
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
 import { MANGO_TOKEN } from 'lib/smart-contracts';
@@ -8,48 +10,37 @@ import { bnToNumber } from 'utils/number';
 
 import * as Styles from './styles';
 
-const BALANCE_REFRESH_TIME = 2000;
+const BALANCE_REFRESH_TIME = 5000;
 
 function ConnectButton({ wallet, walletActions }) {
   const {
     account,
-    signedIn,
-    balance,
+    balances,
   } = wallet;
   const walletConnection = useContext(WalletConnectionContext);
-  const [refreshBalance, setRefreshBalance] = useState(false);
 
   const onConnect = async () => {
     await walletConnection.connect();
   };
 
-  const loadBalance = async () => {
-    if (walletConnection.contracts[MANGO_TOKEN]) {
+  const updateMangoBalance = async () => {
+    if (account && walletConnection.contracts[MANGO_TOKEN]) {
       const result = await walletConnection.contracts[MANGO_TOKEN].balanceOf(wallet.account).call();
 
-      walletActions.setBalance(result.toString());
+      walletActions.setBalance(MNGO, result.toString());
     }
   };
 
   useEffect(() => {
-    if (wallet.account) loadBalance();
-  }, [wallet.networkId, wallet.account]);
+    updateMangoBalance();
 
-  useEffect(() => {
-    let interval = null;
-    if (!refreshBalance) {
-      setRefreshBalance(true);
-      interval = setInterval(async () => {
-        if (wallet.networkId && wallet.account) {
-          loadBalance();
-        }
-      }, BALANCE_REFRESH_TIME);
-    }
+    const interval = setInterval(async () => {
+      updateMangoBalance();
+    }, BALANCE_REFRESH_TIME);
     return () => {
-      setRefreshBalance(false);
-      if (interval) clearInterval(interval);
+      clearInterval(interval);
     };
-  });
+  }, []);
 
   return (
     <Styles.Container>
@@ -63,7 +54,7 @@ function ConnectButton({ wallet, walletActions }) {
               {account.slice(-4)}
             </Styles.AccountNumber>
             <div>
-              <strong>{bnToNumber(balance).toString()}</strong>
+              <strong>{balances[MNGO] ? bnToNumber(balances[MNGO]).toString() : 0}</strong>
               {' '}
               <small>MNGO</small>
             </div>

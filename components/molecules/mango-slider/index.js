@@ -37,6 +37,7 @@ const MangoSlider = ({ className, onChange, modifiedValue }) => {
         max={1}
         min={0}
         onChange={setSlideValue}
+        onChangeCommitted={setSlideValue}
         value={value}
         valueLabelFormat={(valueOnSlide) => `${Math.floor(valueOnSlide * 100)}%`}
         valueLabelDisplay="on"

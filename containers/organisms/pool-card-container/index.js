@@ -19,14 +19,13 @@ import { WalletConnectionContext } from 'lib/wallet-connection';
 import { numberToBN, bnToNumber } from 'utils/number';
 
 const PoolCardContainer = ({
-  token, smartContract, stakingSmartContract, verified, wallet, poolId,
+  token, smartContract, stakingSmartContract, verified, wallet, poolId, walletActions,
 }) => {
   const walletConnection = useContext(WalletConnectionContext);
   const [apr, setApr] = useState(null);
   const [approved, setApproved] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
-  const [balance, setBalance] = useState(0);
   const [loadingStaking, setLoadingStaking] = useState(false);
   const [loadingUnstaking, setLoadingUnstaking] = useState(false);
   const [loadingApprove, setLoadingApprove] = useState(false);
@@ -97,7 +96,7 @@ const PoolCardContainer = ({
       from: wallet.account,
     }).on('receipt', () => {
       getStakedTokens();
-      updateBalance();
+      updateStakedTokenBalance();
       hideStakeModal();
     }).catch((e) => {
       console.error(e);
@@ -113,7 +112,7 @@ const PoolCardContainer = ({
       from: wallet.account,
     }).on('receipt', () => {
       getStakedTokens();
-      updateBalance();
+      updateStakedTokenBalance();
       hideUnstakeModal();
     }).catch((e) => {
       console.error(e);
@@ -122,13 +121,13 @@ const PoolCardContainer = ({
     setLoadingUnstaking(false);
   };
 
-  const updateBalance = async () => {
+  const updateStakedTokenBalance = async () => {
     if (!walletConnection.contracts[smartContract]) return;
 
     try {
       const result = await walletConnection.contracts[smartContract].balanceOf(wallet.account).call();
 
-      setBalance(result);
+      walletActions.setBalance(token, result);
     } catch (e) {
       console.error(e);
     }
@@ -178,7 +177,7 @@ const PoolCardContainer = ({
       if (wallet.account) {
         await getEarnedTokens();
         await getStakedTokens();
-        await updateBalance();
+        await updateStakedTokenBalance();
       }
     }
   }, [wallet.networkId, wallet.account]);
@@ -208,7 +207,7 @@ const PoolCardContainer = ({
         onUnstake={displayUnstakeModal}
       />
       <StakeTokenModal
-        balance={balance}
+        balance={wallet.balances[token]}
         loading={loadingStaking}
         token={token}
         show={showStakeModal}
@@ -217,7 +216,7 @@ const PoolCardContainer = ({
         onBuy={() => console.log('TODO: onBuy')}
       />
       <UnstakeTokenModal
-        balance={balance}
+        balance={numberToBN(stakedToken.earnings)}
         loading={loadingUnstaking}
         token={token}
         show={showUnstakeModal}

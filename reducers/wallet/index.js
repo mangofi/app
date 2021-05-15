@@ -1,19 +1,23 @@
-import {
-  SET_ACCOUNT,
-} from '../../actions/wallet/action-types';
+import * as actions from '../../actions/wallet/action-types';
 
 import initialState from './initialState';
 
-export default function Web3(state = initialState, action) {
+export default function Wallet(state = initialState, action) {
   switch (action.type) {
-    case SET_ACCOUNT:
+    case actions.SET_ACCOUNT:
       return {
         ...state,
         ...action.payload,
       };
-    default:
+    case actions.UPDATE_BALANCE:
       return {
         ...state,
+        balances: {
+          ...state.balances,
+          [action.payload.symbol]: action.payload.balance,
+        },
       };
+    default:
+      return state;
   }
 }

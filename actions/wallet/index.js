@@ -1,14 +1,13 @@
-import {
-  SET_ACCOUNT,
-} from './action-types';
+import * as actions from './action-types';
 
 export function setAccount(address) {
   return (dispatch) => {
     dispatch({
-      type: SET_ACCOUNT,
+      type: actions.SET_ACCOUNT,
       payload: {
         account: address,
         signedIn: !!address,
+        balances: {},
       },
     });
   };
@@ -17,7 +16,7 @@ export function setAccount(address) {
 export function setNetworkId(networkId) {
   return (dispatch) => {
     dispatch({
-      type: SET_ACCOUNT,
+      type: actions.SET_ACCOUNT,
       payload: {
         networkId,
       },
@@ -25,13 +24,16 @@ export function setNetworkId(networkId) {
   };
 }
 
-export function setBalance(balance) {
+export function setBalance(symbol, balance) {
   return (dispatch) => {
     dispatch({
-      type: SET_ACCOUNT,
+      type: actions.UPDATE_BALANCE,
       payload: {
+        symbol,
         balance,
       },
     });
   };
 }
+
+export default null;
