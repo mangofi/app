@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'components/atoms/button';
@@ -8,7 +8,7 @@ import CloseButton from 'components/atoms/close-button';
 import Modal from 'components/molecules/modal';
 import MangoSlider from 'components/molecules/mango-slider';
 
-import { div, add } from 'utils/number';
+import { div, bnToNumber, perc } from 'utils/number';
 
 import * as Styles from './styles';
 
@@ -17,6 +17,7 @@ const UnstakeTokenModal = ({
 }) => {
   const [amountToUnstake, setAmountToUnstake] = useState('');
   const [invalidAmount, setInvalidAmount] = useState(false);
+  const [sliderPercentage, setSliderPercentage] = useState(0);
 
   const sanitizeAmount = (value) => {
     const numericValue = parseFloat(value);
@@ -31,6 +32,8 @@ const UnstakeTokenModal = ({
     return amountToUnstake;
   };
 
+  const roundedBalance = useMemo(() => bnToNumber(balance).precision(3).toString(), [balance]);
+
   const onUnstakeClick = () => {
     if (loading) return;
 
@@ -42,33 +45,24 @@ const UnstakeTokenModal = ({
   };
 
   const onInputChange = (event) => {
+    const sanitizedAmount = sanitizeAmount(event.target.value);
+
     setInvalidAmount(false);
-    setAmountToUnstake(sanitizeAmount(event.target.value));
+    setAmountToUnstake(sanitizedAmount);
+    setSliderPercentage(div(sanitizedAmount, roundedBalance));
   };
 
   const onSliderChange = (value) => {
-    switch (value) {
-      case 0:
-        setAmountToUnstake(0);
-        break;
-      case 0.25:
-        setAmountToUnstake(div(balance, 3));
-        break;
-      case 0.50:
-        setAmountToUnstake(div(balance, 2));
-        break;
-      case 0.75:
-        setAmountToUnstake(add(div(balance, 2), div(balance, 3)));
-        break;
-      default:
-        setAmountToUnstake(balance);
-    }
+    const roundedBalance = bnToNumber(balance).precision(3).toString();
+
+    setAmountToUnstake(perc(roundedBalance, value));
   };
 
   useEffect(() => {
     if (show) {
       setAmountToUnstake('');
       setInvalidAmount(false);
+      setSliderPercentage(0);
     }
   }, [show]);
 
@@ -91,7 +85,7 @@ const UnstakeTokenModal = ({
         <Styles.BalanceContainer>
           <Styles.Balance>Balance</Styles.Balance>
           <span>
-            {balance}
+            {bnToNumber(balance).toString()}
             {' '}
             {token}
           </span>
@@ -106,7 +100,7 @@ const UnstakeTokenModal = ({
             size="lg"
           />
         </div>
-        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} />
+        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} modifiedValue={sliderPercentage} />
         <div className="mt-2">
           Your earnings and staked balance will be withdrawn into your wallet. You will need to stake again in order to keep earning.
         </div>

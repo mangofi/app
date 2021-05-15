@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 
 import Button from 'components/atoms/button';
 import CloseButton from 'components/atoms/close-button';
@@ -14,6 +15,8 @@ import UnstakeTokenModal from 'components/organisms/unstake-token-modal';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
+
+import { numberToBN, bnToNumber } from 'utils/number';
 
 const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId,
@@ -48,7 +51,7 @@ const PoolCardContainer = ({
     if (walletConnection.contracts[stakingSmartContract]) {
       try {
         const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
-        const earnings = parseFloat(result);
+        const earnings = numberToBN(result).toString();
 
         setEarnedToken((prevState) => ({
           ...prevState,
@@ -64,7 +67,7 @@ const PoolCardContainer = ({
   const getStakedTokens = async () => {
     if (walletConnection.contracts[smartContract]) {
       const result = await walletConnection.contracts[stakingSmartContract].userInfo(0, wallet.account).call();
-      const poolStaking = result[poolId];
+      const poolStaking = bnToNumber(result[poolId]).toString();
 
       setStakedToken((prevState) => ({
         ...prevState,
@@ -90,10 +93,11 @@ const PoolCardContainer = ({
   const onStake = async (amount) => {
     setLoadingStaking(true);
 
-    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(amount).send({
+    const result = await walletConnection.contracts[stakingSmartContract].enterStaking(numberToBN(amount).toString()).send({
       from: wallet.account,
     }).on('receipt', () => {
       getStakedTokens();
+      updateBalance();
       hideStakeModal();
     }).catch((e) => {
       console.error(e);
@@ -105,10 +109,11 @@ const PoolCardContainer = ({
   const onUnstake = async (amount) => {
     setLoadingUnstaking(true);
 
-    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(amount).send({
+    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(numberToBN(amount).toString()).send({
       from: wallet.account,
     }).on('receipt', () => {
       getStakedTokens();
+      updateBalance();
       hideUnstakeModal();
     }).catch((e) => {
       console.error(e);
@@ -117,7 +122,7 @@ const PoolCardContainer = ({
     setLoadingUnstaking(false);
   };
 
-  const getBalance = async () => {
+  const updateBalance = async () => {
     if (!walletConnection.contracts[smartContract]) return;
 
     try {
@@ -173,7 +178,7 @@ const PoolCardContainer = ({
       if (wallet.account) {
         await getEarnedTokens();
         await getStakedTokens();
-        await getBalance();
+        await updateBalance();
       }
     }
   }, [wallet.networkId, wallet.account]);

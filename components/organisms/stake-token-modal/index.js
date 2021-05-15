@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'components/atoms/button';
@@ -8,7 +8,9 @@ import CloseButton from 'components/atoms/close-button';
 import Modal from 'components/molecules/modal';
 import MangoSlider from 'components/molecules/mango-slider';
 
-import { div, add } from 'utils/number';
+import {
+  div, bnToNumber, perc,
+} from 'utils/number';
 
 import * as Styles from './styles';
 
@@ -17,6 +19,7 @@ const StakeTokenModal = ({
 }) => {
   const [amountToStake, setAmountToStake] = useState('');
   const [invalidAmount, setInvalidAmount] = useState(false);
+  const [sliderPercentage, setSliderPercentage] = useState(0);
 
   const sanitizeAmount = (value) => {
     const numericValue = parseFloat(value);
@@ -31,6 +34,8 @@ const StakeTokenModal = ({
     return amountToStake;
   };
 
+  const roundedBalance = useMemo(() => bnToNumber(balance).precision(3).toString(), [balance]);
+
   const onStakeClick = () => {
     if (loading) return;
 
@@ -42,33 +47,22 @@ const StakeTokenModal = ({
   };
 
   const onInputChange = (event) => {
+    const sanitizedAmount = sanitizeAmount(event.target.value);
+
     setInvalidAmount(false);
-    setAmountToStake(sanitizeAmount(event.target.value));
+    setAmountToStake(sanitizedAmount);
+    setSliderPercentage(div(sanitizedAmount, roundedBalance));
   };
 
   const onSliderChange = (value) => {
-    switch (value) {
-      case 0:
-        setAmountToStake(0);
-        break;
-      case 0.25:
-        setAmountToStake(div(balance, 3));
-        break;
-      case 0.50:
-        setAmountToStake(div(balance, 2));
-        break;
-      case 0.75:
-        setAmountToStake(add(div(balance, 2), div(balance, 3)));
-        break;
-      default:
-        setAmountToStake(balance);
-    }
+    setAmountToStake(perc(roundedBalance, value));
   };
 
   useEffect(() => {
     if (show) {
       setAmountToStake('');
       setInvalidAmount(false);
+      setSliderPercentage(0);
     }
   }, [show]);
 
@@ -91,7 +85,7 @@ const StakeTokenModal = ({
         <Styles.BalanceContainer>
           <Styles.Balance>Balance</Styles.Balance>
           <span>
-            {balance}
+            {bnToNumber(balance).toString()}
             {' '}
             {token}
           </span>
@@ -106,7 +100,7 @@ const StakeTokenModal = ({
             size="lg"
           />
         </div>
-        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} />
+        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} modifiedValue={sliderPercentage} />
         <div className="mt-2">
           You will need
           {' '}

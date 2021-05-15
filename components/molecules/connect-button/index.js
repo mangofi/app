@@ -1,12 +1,14 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
 import { MANGO_TOKEN } from 'lib/smart-contracts';
 
-import { asToken } from 'utils/number';
+import { bnToNumber } from 'utils/number';
 
 import * as Styles from './styles';
+
+const BALANCE_REFRESH_TIME = 2000;
 
 function ConnectButton({ wallet, walletActions }) {
   const {
@@ -15,6 +17,7 @@ function ConnectButton({ wallet, walletActions }) {
     balance,
   } = wallet;
   const walletConnection = useContext(WalletConnectionContext);
+  const [refreshBalance, setRefreshBalance] = useState(false);
 
   const onConnect = async () => {
     await walletConnection.connect();
@@ -29,10 +32,24 @@ function ConnectButton({ wallet, walletActions }) {
   };
 
   useEffect(() => {
-    if (wallet.account) {
-      loadBalance();
-    }
+    if (wallet.account) loadBalance();
   }, [wallet.networkId, wallet.account]);
+
+  useEffect(() => {
+    let interval = null;
+    if (!refreshBalance) {
+      setRefreshBalance(true);
+      interval = setInterval(async () => {
+        if (wallet.networkId && wallet.account) {
+          loadBalance();
+        }
+      }, BALANCE_REFRESH_TIME);
+    }
+    return () => {
+      setRefreshBalance(false);
+      if (interval) clearInterval(interval);
+    };
+  });
 
   return (
     <Styles.Container>
@@ -46,7 +63,7 @@ function ConnectButton({ wallet, walletActions }) {
               {account.slice(-4)}
             </Styles.AccountNumber>
             <div>
-              <strong>{asToken(balance)}</strong>
+              <strong>{bnToNumber(balance).toString()}</strong>
               {' '}
               <small>MNGO</small>
             </div>
