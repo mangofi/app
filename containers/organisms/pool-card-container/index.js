@@ -51,7 +51,7 @@ const PoolCardContainer = ({
     if (walletConnection.contracts[stakingSmartContract]) {
       try {
         const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
-        const earnings = numberToBN(result).toString();
+        const earnings = bnToNumber(result).precision(6).toString();
 
         setEarnedToken((prevState) => ({
           ...prevState,
