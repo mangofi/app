@@ -53,8 +53,6 @@ const UnstakeTokenModal = ({
   };
 
   const onSliderChange = (value) => {
-    const roundedBalance = bnToNumber(balance).precision(3).toString();
-
     setAmountToUnstake(perc(roundedBalance, value));
   };
 
