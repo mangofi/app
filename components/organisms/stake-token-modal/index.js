@@ -129,7 +129,7 @@ const StakeTokenModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button loading={loading} flat fixedWidth={138} onClick={!loading && onStakeClick}>
+          <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={!loading && onStakeClick}>
             Stake
           </Button>
         </div>

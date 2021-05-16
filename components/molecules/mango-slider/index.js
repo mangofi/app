@@ -19,7 +19,7 @@ const MangoSlider = ({ className, onChange, modifiedValue }) => {
     <Styles.MangoHandle {...props}>
       <img src="/img/mango-solid.svg" />
       <Styles.ValueLabel>
-        {`${Math.floor(props['aria-valuenow'] * 100)}%`}
+        {`${Math.floor((props['aria-valuenow'] || 0) * 100)}%`}
       </Styles.ValueLabel>
     </Styles.MangoHandle>
   );
@@ -39,7 +39,6 @@ const MangoSlider = ({ className, onChange, modifiedValue }) => {
         onChange={setSlideValue}
         onChangeCommitted={setSlideValue}
         value={value}
-        valueLabelFormat={(valueOnSlide) => `${Math.floor(valueOnSlide * 100)}%`}
         valueLabelDisplay="on"
         ThumbComponent={renderMangoHandle}
       />
