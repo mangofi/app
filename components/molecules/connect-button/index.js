@@ -54,7 +54,7 @@ function ConnectButton({ wallet, walletActions }) {
               {account.slice(-4)}
             </Styles.AccountNumber>
             <div>
-              <strong>{balances[MNGO] ? bnToNumber(balances[MNGO]).toString() : 0}</strong>
+              <strong>{balances[MNGO] ? bnToNumber(balances[MNGO]).toFormat() : 0}</strong>
               {' '}
               <small>MNGO</small>
             </div>

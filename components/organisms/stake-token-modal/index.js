@@ -34,7 +34,7 @@ const StakeTokenModal = ({
     return amountToStake;
   };
 
-  const roundedBalance = useMemo(() => bnToNumber(balance).precision(3).toString(), [balance]);
+  const balanceToNumber = useMemo(() => bnToNumber(balance), [balance]);
 
   const onStakeClick = () => {
     if (loading) return;
@@ -51,11 +51,15 @@ const StakeTokenModal = ({
 
     setInvalidAmount(false);
     setAmountToStake(sanitizedAmount);
-    setSliderPercentage(div(sanitizedAmount, roundedBalance));
+    setSliderPercentage(div(sanitizedAmount, balanceToNumber.toString()));
   };
 
   const onSliderChange = (value) => {
-    setAmountToStake(perc(roundedBalance, value));
+    if (value === 1) {
+      setAmountToStake(balanceToNumber.toString());
+    } else {
+      setAmountToStake(perc(balanceToNumber.toString(), value));
+    }
   };
 
   useEffect(() => {
@@ -85,7 +89,7 @@ const StakeTokenModal = ({
         <Styles.BalanceContainer>
           <Styles.Balance>Balance</Styles.Balance>
           <span>
-            {bnToNumber(balance).toString()}
+            {balanceToNumber.toFormat()}
             {' '}
             {token}
           </span>

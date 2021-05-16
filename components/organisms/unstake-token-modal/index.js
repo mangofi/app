@@ -32,7 +32,7 @@ const UnstakeTokenModal = ({
     return amountToUnstake;
   };
 
-  const roundedBalance = useMemo(() => bnToNumber(balance).precision(3).toString(), [balance]);
+  const balanceToNumber = useMemo(() => bnToNumber(balance), [balance]);
 
   const onUnstakeClick = () => {
     if (loading) return;
@@ -49,11 +49,15 @@ const UnstakeTokenModal = ({
 
     setInvalidAmount(false);
     setAmountToUnstake(sanitizedAmount);
-    setSliderPercentage(div(sanitizedAmount, roundedBalance));
+    setSliderPercentage(div(sanitizedAmount, balanceToNumber.toString()));
   };
 
   const onSliderChange = (value) => {
-    setAmountToUnstake(perc(roundedBalance, value));
+    if (value === 1) {
+      setAmountToUnstake(balanceToNumber.toString());
+    } else {
+      setAmountToUnstake(perc(balanceToNumber.toString(), value));
+    }
   };
 
   useEffect(() => {
@@ -83,7 +87,7 @@ const UnstakeTokenModal = ({
         <Styles.BalanceContainer>
           <Styles.Balance>Balance</Styles.Balance>
           <span>
-            {bnToNumber(balance).toString()}
+            {balanceToNumber.toFormat()}
             {' '}
             {token}
           </span>

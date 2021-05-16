@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'components/atoms/button';
@@ -7,11 +7,9 @@ import CloseButton from 'components/atoms/close-button';
 
 import Modal from 'components/molecules/modal';
 import Coin from 'components/molecules/coin';
-import * as CoinConstants from 'components/molecules/coin/constants';
-import MangoSlider from 'components/molecules/mango-slider';
 
 import {
-  div, bnToNumber, perc,
+  div, bnToNumber,
 } from 'utils/number';
 
 import { COMPOUND, HARVEST } from './constants';
@@ -62,11 +60,15 @@ const CollectModal = ({
         <CloseButton onClick={onHide} />
       </Modal.Header>
       <Modal.Body as={Styles.Body}>
-        <Switch options={OPTIONS} selectedIndex={OPTIONS.indexOf(selectedOption)} onChange={setSwitchOption} />
+        <Switch
+          options={OPTIONS}
+          selectedIndex={OPTIONS.indexOf(selectedOption)}
+          onChange={setSwitchOption}
+        />
         <div className="d-flex flex-direction-row align-items-center mt-3">
           <Coin name={token} small />
           <Styles.Earnings className="ml-2">
-            {bnToNumber(earnings).toString()}
+            {bnToNumber(earnings).toFormat()}
           </Styles.Earnings>
         </div>
         {selectedOption === COMPOUND ? (
@@ -77,7 +79,7 @@ const CollectModal = ({
             <Styles.Text>
               Your new staked balance will be
               {' '}
-              <strong>{newStakedBalance}</strong>
+              <strong>{newStakedBalance.toFormat()}</strong>
             </Styles.Text>
           </>
         ) : (
@@ -93,7 +95,12 @@ const CollectModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button flat loading={loading} fixedWidth={138} onClick={!loading && onCompoundHarvestClick}>
+          <Button
+            flat
+            loading={loading}
+            fixedWidth={138}
+            onClick={!loading && onCompoundHarvestClick}
+          >
             {selectedOption}
           </Button>
         </div>

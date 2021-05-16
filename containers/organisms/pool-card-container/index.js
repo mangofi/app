@@ -17,7 +17,9 @@ import CollectModal from 'components/organisms/collect-modal';
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
 
-import { numberToBN, bnToNumber, add } from 'utils/number';
+import {
+  numberToBN, bnToNumber, add, asBN,
+} from 'utils/number';
 
 const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId, walletActions,
@@ -247,7 +249,16 @@ const PoolCardContainer = ({
         smartContract={smartContract}
         verified={verified}
         apr={apr && `${apr}%`}
-        tokenEarnings={[earnedToken, stakedToken]}
+        tokenEarnings={[
+          {
+            ...earnedToken,
+            earnings: asBN(earnedToken.earnings).toFormat(),
+          },
+          {
+            ...stakedToken,
+            earnings: asBN(stakedToken.earnings).toFormat(),
+          },
+        ]}
         onEnable={onEnable}
         onStake={displayStakeModal}
         onUnstake={displayUnstakeModal}
@@ -272,7 +283,7 @@ const PoolCardContainer = ({
       <CollectModal
         initialEarnings={numberToBN(earnedToken.earnings)}
         loading={loadingCollect}
-        newStakedBalance={add(numberToBN(stakedToken.earnings), numberToBN(earnedToken.earnings)).toString()}
+        newStakedBalance={add(numberToBN(stakedToken.earnings), numberToBN(earnedToken.earnings))}
         token={token}
         show={showCollectModal}
         onHide={hideCollectModal}
