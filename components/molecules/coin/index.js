@@ -3,24 +3,26 @@ import PropTypes from 'prop-types';
 
 import * as Styles from './styles';
 
-import * as Constants from './constants';
+import { COINS_URL, MEDIUM, SMALL } from './constants';
 
-const Coin = ({ name, subCoin }) => {
-  const coinUrl = useMemo(() => `${Constants.COINS_URL[name]}`, [name]);
-  const subCoinUrl = useMemo(() => `${Constants.COINS_URL[subCoin]}`, [subCoin]);
+const Coin = ({
+  className, name, subToken, small,
+}) => {
+  const coinUrl = useMemo(() => `${small ? COINS_URL[SMALL][name] : COINS_URL[MEDIUM][name]}`, [name]);
+  const subTokenUrl = useMemo(() => `${small ? COINS_URL[SMALL][subToken] : COINS_URL[MEDIUM][subToken]}`, [subToken]);
 
   const renderSubCoin = useCallback(() => {
-    if (subCoin) {
+    if (subToken) {
       return (
         <Styles.SubCoinContainer>
-          <Styles.Image src={subCoinUrl} small />
+          <Styles.Image src={subTokenUrl} small />
         </Styles.SubCoinContainer>
       );
     }
-  }, [subCoin]);
+  }, [subToken]);
 
   return (
-    <Styles.Container>
+    <Styles.Container className={className}>
       <Styles.Image src={coinUrl} />
       {renderSubCoin()}
     </Styles.Container>
@@ -28,12 +30,16 @@ const Coin = ({ name, subCoin }) => {
 };
 
 Coin.propTypes = {
+  className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  subCoin: PropTypes.string,
+  size: PropTypes.bool,
+  subToken: PropTypes.string,
 };
 
 Coin.defaultProps = {
-  subCoin: null,
+  className: null,
+  small: false,
+  subToken: null,
 };
 
 export default Coin;

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Coin from 'components/molecules/coin';
+
 export const Container = styled.div`
   background-color: var(--black800);
   border: 1px solid var(--black700);
@@ -38,4 +40,9 @@ export const IconContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+`;
+
+export const StyledCoin = styled(Coin)`
+  margin-left: 28px;
+  margin-top: -41px;
 `;

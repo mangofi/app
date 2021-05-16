@@ -12,11 +12,12 @@ import Modal from 'components/molecules/modal';
 import PoolCard from 'components/organisms/pool-card';
 import StakeTokenModal from 'components/organisms/stake-token-modal';
 import UnstakeTokenModal from 'components/organisms/unstake-token-modal';
+import CollectModal from 'components/organisms/collect-modal';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
 
-import { numberToBN, bnToNumber } from 'utils/number';
+import { numberToBN, bnToNumber, add } from 'utils/number';
 
 const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId, walletActions,
@@ -26,9 +27,11 @@ const PoolCardContainer = ({
   const [approved, setApproved] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
+  const [showCollectModal, setShowCollectModal] = useState(false);
   const [loadingStaking, setLoadingStaking] = useState(false);
   const [loadingUnstaking, setLoadingUnstaking] = useState(false);
   const [loadingApprove, setLoadingApprove] = useState(false);
+  const [loadingCollect, setLoadingCollect] = useState(false);
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
@@ -50,12 +53,12 @@ const PoolCardContainer = ({
     if (walletConnection.contracts[stakingSmartContract]) {
       try {
         const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
-        const earnings = bnToNumber(result).toString();
+        const earnings = bnToNumber(result);
 
         setEarnedToken((prevState) => ({
           ...prevState,
-          disabled: !approved || earnings == 0,
-          earnings,
+          disabled: earnings.eq(0),
+          earnings: earnings.toString(),
         }));
       } catch (e) {
         console.error(e);
@@ -133,6 +136,40 @@ const PoolCardContainer = ({
     }
   };
 
+  const onHarvest = async () => {
+    setLoadingCollect(true);
+
+    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking('0').send({
+      from: wallet.account,
+    }).on('receipt', () => {
+      getEarnedTokens();
+      getStakedTokens();
+      updateStakedTokenBalance();
+      hideCollectModal();
+    }).catch((e) => {
+      console.error(e);
+    });
+
+    setLoadingCollect(false);
+  };
+
+  const onCompound = async () => {
+    setLoadingCollect(true);
+
+    await walletConnection.contracts[stakingSmartContract].enterStaking(numberToBN(earnedToken.earnings).toString()).send({
+      from: wallet.account,
+    }).on('receipt', () => {
+      getEarnedTokens();
+      getStakedTokens();
+      updateStakedTokenBalance();
+      hideCollectModal();
+    }).catch((e) => {
+      console.error(e);
+    });
+
+    setLoadingCollect(false);
+  };
+
   const displayStakeModal = () => {
     setLoadingStaking(false);
     setShowStakeModal(true);
@@ -151,15 +188,15 @@ const PoolCardContainer = ({
     setShowUnstakeModal(false);
   };
 
-  const [earnedToken, setEarnedToken] = useState({
-    earnings: 0.0,
-    disabled: !approved,
-    usdEarnings: '~0.000',
-    empty: false,
-    token,
-    stake: false,
-    onTokenBalanceClick: () => { console.log('TODO: Collect'); },
-  });
+  const displayCollectModal = () => {
+    setLoadingCollect(false);
+    setShowCollectModal(true);
+  };
+
+  const hideCollectModal = () => {
+    setShowCollectModal(false);
+  };
+
   const [stakedToken, setStakedToken] = useState({
     earnings: 0.0,
     disabled: !approved,
@@ -168,6 +205,15 @@ const PoolCardContainer = ({
     token,
     staked: true,
     onTokenBalanceClick: displayStakeModal,
+  });
+  const [earnedToken, setEarnedToken] = useState({
+    earnings: 0.0,
+    disabled: !approved,
+    usdEarnings: '~0.000',
+    empty: false,
+    token,
+    staked: false,
+    onTokenBalanceClick: displayCollectModal,
   });
 
   useEffect(async () => {
@@ -222,6 +268,16 @@ const PoolCardContainer = ({
         show={showUnstakeModal}
         onHide={hideUnstakeModal}
         onUnstake={onUnstake}
+      />
+      <CollectModal
+        initialEarnings={numberToBN(earnedToken.earnings)}
+        loading={loadingCollect}
+        newStakedBalance={add(numberToBN(stakedToken.earnings), numberToBN(earnedToken.earnings)).toString()}
+        token={token}
+        show={showCollectModal}
+        onHide={hideCollectModal}
+        onHarvest={onHarvest}
+        onCompound={onCompound}
       />
     </>
   );

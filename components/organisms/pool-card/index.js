@@ -8,8 +8,6 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/atoms/button';
 import { TokenBalance } from 'components/atoms/card';
 
-import Coin from 'components/molecules/coin';
-
 import * as Styles from './styles';
 
 const PoolCard = ({
@@ -69,7 +67,7 @@ const PoolCard = ({
   )));
 
   return (
-    <Styles.StyledCard coin={<Coin name={token} />} working={canUnstake}>
+    <Styles.StyledCard token={token} working={canUnstake}>
       <small className="d-flex flex-fill flex-row justify-content-end text-right">
         <a href="#">View details</a>
       </small>

@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';
 
 import * as Styles from './styles';
 
-const Card = ({ className, children, coin }) => {
+const Card = ({
+  className, children, token, subToken,
+}) => {
   const renderCoin = useCallback(() => {
-    if (coin) {
+    if (token) {
       return (
         <Styles.IconContainer>
-          {coin}
+          <Styles.StyledCoin name={token} subToken={subToken} />
         </Styles.IconContainer>
       );
     }
     return null;
-  }, [coin]);
+  }, [token]);
 
   return (
     <Styles.Container className={className}>
@@ -24,14 +26,16 @@ const Card = ({ className, children, coin }) => {
 };
 
 Card.propTypes = {
-  coin: PropTypes.string,
+  token: PropTypes.string,
+  subToken: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.element,
 };
 
 Card.defaultProps = {
   className: null,
-  coin: null,
+  token: null,
+  subToken: null,
   children: null,
 };
 

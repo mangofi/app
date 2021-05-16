@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  margin-left: 28px;
-  margin-top: -41px;
   position: relative;
 `;
 
 export const Image = styled.img`
-  
+  height: 100%;
 `;
 
 export const SubCoinContainer = styled.div`

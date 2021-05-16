@@ -38,7 +38,7 @@ export function div(a, b) {
 }
 
 export function add(a, b) {
-  return toBN(a).add(toBN(b));
+  return bnToNumber(a).plus(bnToNumber(b));
 }
 
 export function perc(number, percentage) {
