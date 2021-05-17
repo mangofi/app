@@ -60,6 +60,12 @@ const UnstakeTokenModal = ({
     }
   };
 
+  const onUnstakeButtonClick = () => {
+    if (loading) return;
+
+    onUnstakeClick();
+  };
+
   useEffect(() => {
     if (show) {
       setAmountToUnstake('');
@@ -97,6 +103,7 @@ const UnstakeTokenModal = ({
             isInvalid={invalidAmount}
             value={amountToUnstake}
             onChange={onInputChange}
+            onEnterPressed={onUnstakeButtonClick}
             placeholder={0}
             suffix={token}
             size="lg"
@@ -114,7 +121,7 @@ const UnstakeTokenModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button disabled={amountToUnstake == 0} flat fixedWidth={138} loading={loading} onClick={!loading && onUnstakeClick}>
+          <Button disabled={amountToUnstake == 0} flat fixedWidth={138} loading={loading} onClick={onUnstakeButtonClick}>
             Unstake
           </Button>
         </div>

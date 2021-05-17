@@ -13,6 +13,7 @@ import PoolCard from 'components/organisms/pool-card';
 import StakeTokenModal from 'components/organisms/stake-token-modal';
 import UnstakeTokenModal from 'components/organisms/unstake-token-modal';
 import CollectModal from 'components/organisms/collect-modal';
+import DetailsModal from 'components/organisms/details-modal';
 
 import connector from 'lib/connector';
 import { WalletConnectionContext } from 'lib/wallet-connection';
@@ -26,14 +27,17 @@ const PoolCardContainer = ({
 }) => {
   const walletConnection = useContext(WalletConnectionContext);
   const [apr, setApr] = useState(null);
+  const [totalStaked, setTotalStaked] = useState(0);
   const [approved, setApproved] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [loadingStaking, setLoadingStaking] = useState(false);
   const [loadingUnstaking, setLoadingUnstaking] = useState(false);
   const [loadingApprove, setLoadingApprove] = useState(false);
   const [loadingCollect, setLoadingCollect] = useState(false);
+  const [loadingTotalStaked, setLoadingTotalStaked] = useState(false);
 
   const checkTokenAllowance = async () => {
     if (walletConnection.contracts[smartContract]) {
@@ -138,10 +142,25 @@ const PoolCardContainer = ({
     }
   };
 
+  const updateTotalStaked = async () => {
+    if (!walletConnection.contracts[smartContract]) return;
+    setLoadingTotalStaked(true);
+
+    try {
+      const result = await walletConnection.contracts[smartContract].balanceOf(walletConnection.contracts[stakingSmartContract].address).call();
+
+      setTotalStaked(result);
+    } catch (e) {
+      console.error(e);
+    }
+
+    setLoadingTotalStaked(false);
+  };
+
   const onHarvest = async () => {
     setLoadingCollect(true);
 
-    const result = await walletConnection.contracts[stakingSmartContract].leaveStaking('0').send({
+    await walletConnection.contracts[stakingSmartContract].leaveStaking('0').send({
       from: wallet.account,
     }).on('receipt', () => {
       getEarnedTokens();
@@ -197,6 +216,15 @@ const PoolCardContainer = ({
 
   const hideCollectModal = () => {
     setShowCollectModal(false);
+  };
+
+  const displayDetailsModal = () => {
+    updateTotalStaked();
+    setShowDetailsModal(true);
+  };
+
+  const hideDetailsModal = () => {
+    setShowDetailsModal(false);
   };
 
   const [stakedToken, setStakedToken] = useState({
@@ -262,6 +290,7 @@ const PoolCardContainer = ({
         onEnable={onEnable}
         onStake={displayStakeModal}
         onUnstake={displayUnstakeModal}
+        onViewDetails={displayDetailsModal}
       />
       <StakeTokenModal
         balance={wallet.balances[token]}
@@ -289,6 +318,14 @@ const PoolCardContainer = ({
         onHide={hideCollectModal}
         onHarvest={onHarvest}
         onCompound={onCompound}
+      />
+      <DetailsModal
+        show={showDetailsModal}
+        totalStaked={totalStaked}
+        loading={loadingTotalStaked}
+        onViewContract={() => {}}
+        onHide={hideDetailsModal}
+        token={token}
       />
     </>
   );

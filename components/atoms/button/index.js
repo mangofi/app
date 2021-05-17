@@ -5,16 +5,20 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Styles from './styles';
 
 const Button = ({
-  children, className, small, secondary, flat, fixedWidth, icon, loading, onClick, ...props
+  children, className, small, secondary, flat, fixedWidth, leftIcon, icon, loading, onClick, ...props
 }) => (
   <Styles.Container className={className} fixedWidth={fixedWidth} small={small} secondary={secondary} flat={flat} onClick={onClick || (() => {})} {...props}>
+    {leftIcon}
+    {' '}
     {children}
+    {' '}
+    {icon}
     {' '}
     {loading ? (
       <Styles.SpinnerContainer className="ml-2">
         <CircularProgress />
       </Styles.SpinnerContainer>
-    ) : icon}
+    ) : null}
   </Styles.Container>
 );
 
@@ -26,6 +30,7 @@ Button.propTypes = {
   loading: PropTypes.bool,
   grayedOut: PropTypes.bool,
   icon: PropTypes.element,
+  leftIcon: PropTypes.element,
   small: PropTypes.bool,
   secondary: PropTypes.bool,
 };
@@ -38,6 +43,7 @@ Button.defaultProps = {
   grayedOut: false,
   loading: false,
   icon: null,
+  leftIcon: null,
   small: false,
   secondary: false,
 };

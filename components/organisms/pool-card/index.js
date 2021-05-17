@@ -11,7 +11,7 @@ import { TokenBalance } from 'components/atoms/card';
 import * as Styles from './styles';
 
 const PoolCard = ({
-  loading, token, verified, apr, tokenEarnings, canUnstake, approved, onEnable, onStake, onUnstake,
+  loading, token, verified, apr, tokenEarnings, canUnstake, approved, onEnable, onStake, onUnstake, onViewDetails,
 }) => {
   const renderVerified = useCallback(() => {
     if (verified) {
@@ -69,7 +69,7 @@ const PoolCard = ({
   return (
     <Styles.StyledCard token={token} working={canUnstake}>
       <small className="d-flex flex-fill flex-row justify-content-end text-right">
-        <a href="#">View details</a>
+        <a href="#" onClick={onViewDetails}>View details</a>
       </small>
       <div className="d-flex flex-fill flex-column mt-2">
         <div className="d-flex flex-fill flex-row align-items-space-between">
@@ -119,6 +119,7 @@ PoolCard.propTypes = {
   onEnable: PropTypes.func,
   onStake: PropTypes.func,
   onUnstake: PropTypes.func,
+  onViewDetails: PropTypes.func,
 };
 
 PoolCard.defaultProps = {
@@ -131,6 +132,7 @@ PoolCard.defaultProps = {
   onEnable: () => {},
   onStake: () => {},
   onUnstake: () => {},
+  onViewDetails: () => {},
 };
 
 export default PoolCard;

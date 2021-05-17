@@ -62,6 +62,12 @@ const StakeTokenModal = ({
     }
   };
 
+  const onStakeButtonClick = () => {
+    if (loading) return;
+
+    onStakeClick();
+  };
+
   useEffect(() => {
     if (show) {
       setAmountToStake('');
@@ -99,6 +105,7 @@ const StakeTokenModal = ({
             isInvalid={invalidAmount}
             value={amountToStake}
             onChange={onInputChange}
+            onEnterPressed={onStakeButtonClick}
             placeholder={0}
             suffix={token}
             size="lg"
@@ -129,7 +136,7 @@ const StakeTokenModal = ({
             Cancel
           </Button>
           &nbsp;
-          <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={!loading && onStakeClick}>
+          <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={onStakeButtonClick}>
             Stake
           </Button>
         </div>
