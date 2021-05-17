@@ -1,4 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { MNGO } from 'components/molecules/coin/constants';
 
@@ -12,12 +14,14 @@ import * as Styles from './styles';
 
 const BALANCE_REFRESH_TIME = 5000;
 
-function ConnectButton({ wallet, walletActions }) {
+const ConnectButton = ({ wallet, walletActions, onClick }) => {
   const {
     account,
     balances,
   } = wallet;
   const walletConnection = useContext(WalletConnectionContext);
+  const [balanceInterval, setBalanceInterval] = useState(null);
+  const [polledAccount, setPolledAccount] = useState(null);
 
   const onConnect = async () => {
     await walletConnection.connect();
@@ -25,7 +29,9 @@ function ConnectButton({ wallet, walletActions }) {
 
   const updateMangoBalance = async () => {
     if (account && walletConnection.contracts[MANGO_TOKEN]) {
-      const result = await walletConnection.contracts[MANGO_TOKEN].balanceOf(wallet.account).call().catch((e) => {
+      const result = await walletConnection.contracts[MANGO_TOKEN].balanceOf(
+        wallet.account,
+      ).call().catch((e) => {
         console.error(e);
       });
 
@@ -35,19 +41,40 @@ function ConnectButton({ wallet, walletActions }) {
 
   useEffect(() => {
     updateMangoBalance();
-
-    const interval = setInterval(async () => {
-      updateMangoBalance();
-    }, BALANCE_REFRESH_TIME);
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
+
+  const stopBalancePolling = () => {
+    clearInterval(balanceInterval);
+    setBalanceInterval(null);
+  };
+
+  const startBalancePolling = () => {
+    setBalanceInterval(setInterval(async () => {
+      await updateMangoBalance();
+    }, BALANCE_REFRESH_TIME));
+  };
+
+  useEffect(() => {
+    if (account) {
+      if (polledAccount !== account) {
+        setPolledAccount(account);
+
+        if (balanceInterval) {
+          stopBalancePolling();
+        }
+        startBalancePolling();
+      } else if (!balanceInterval) {
+        startBalancePolling();
+      }
+    } else {
+      stopBalancePolling();
+    }
+  }, [account]);
 
   return (
     <Styles.Container>
       {account ? (
-        <Styles.Address href={`https://etherscan.io/address/${account}`} target="new" title={account}>
+        <Styles.Address onClick={onClick}>
           <Styles.Avatar src="/img/lemon-avatar.png" width={32} height={32} />
           <Styles.AccountInfo>
             <Styles.AccountNumber>
@@ -56,7 +83,7 @@ function ConnectButton({ wallet, walletActions }) {
               {account.slice(-4)}
             </Styles.AccountNumber>
             <div>
-              <strong>{balances[MNGO] ? bnToNumber(balances[MNGO]).toFormat() : 0}</strong>
+              <strong>{balances[MNGO] ? bnToNumber(balances[MNGO]).toFormat() : '---'}</strong>
               {' '}
               <small>MNGO</small>
             </div>
@@ -69,6 +96,14 @@ function ConnectButton({ wallet, walletActions }) {
       )}
     </Styles.Container>
   );
-}
+};
+
+ConnectButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+ConnectButton.defaultProps = {
+  onClick: () => {},
+};
 
 export default connector(['wallet'], ['wallet'])(ConnectButton);

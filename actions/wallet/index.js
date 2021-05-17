@@ -6,9 +6,16 @@ export function setAccount(address) {
       type: actions.SET_ACCOUNT,
       payload: {
         account: address,
-        signedIn: !!address,
-        balances: {},
       },
+    });
+  };
+}
+
+export function setBalances(balances) {
+  return (dispatch) => {
+    dispatch({
+      type: actions.SET_BALANCES,
+      payload: balances,
     });
   };
 }
@@ -16,10 +23,8 @@ export function setAccount(address) {
 export function setNetworkId(networkId) {
   return (dispatch) => {
     dispatch({
-      type: actions.SET_ACCOUNT,
-      payload: {
-        networkId,
-      },
+      type: actions.SET_NETWORK_ID,
+      payload: networkId,
     });
   };
 }
@@ -33,6 +38,18 @@ export function setBalance(symbol, balance) {
         balance,
       },
     });
+  };
+}
+
+export function logOut() {
+  return (dispatch) => {
+    dispatch({
+      type: actions.SET_ACCOUNT,
+      payload: {
+        account: null,
+      },
+    });
+    setBalances({})(dispatch);
   };
 }
 

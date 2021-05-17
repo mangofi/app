@@ -21,6 +21,25 @@ import { WalletConnectionContext } from 'lib/wallet-connection';
 import {
   numberToBN, bnToNumber, add, asBN,
 } from 'utils/number';
+import {
+  generateAddressUrl,
+} from 'utils/bscscan';
+
+const INITIAL_STAKED_TOKEN = {
+  earnings: 0.0,
+  disabled: true,
+  usdEarnings: '~0.000',
+  empty: true,
+  staked: true,
+};
+const INITIAL_EARNED_TOKEN = {
+  earnings: 0.0,
+  disabled: true,
+  usdEarnings: '~0.000',
+  empty: false,
+  staked: false,
+};
+const EARNED_TOKENS_REFRESH_TIME = 5000;
 
 const PoolCardContainer = ({
   token, smartContract, stakingSmartContract, verified, wallet, poolId, walletActions,
@@ -38,9 +57,11 @@ const PoolCardContainer = ({
   const [loadingApprove, setLoadingApprove] = useState(false);
   const [loadingCollect, setLoadingCollect] = useState(false);
   const [loadingTotalStaked, setLoadingTotalStaked] = useState(false);
+  const [earningsInterval, setEarningsInterval] = useState(null);
+  const [polledAccount, setPolledAccount] = useState(null);
 
   const checkTokenAllowance = async () => {
-    if (walletConnection.contracts[smartContract]) {
+    if (walletConnection.contracts[smartContract] && wallet.account) {
       try {
         const allowance = await walletConnection.contracts[smartContract].allowance(
           wallet.account,
@@ -56,7 +77,7 @@ const PoolCardContainer = ({
   };
 
   const getEarnedTokens = async () => {
-    if (walletConnection.contracts[stakingSmartContract]) {
+    if (walletConnection.contracts[stakingSmartContract] && wallet.account) {
       try {
         const result = await walletConnection.contracts[stakingSmartContract].pendingMango(0, wallet.account).call();
         const earnings = bnToNumber(result);
@@ -73,7 +94,7 @@ const PoolCardContainer = ({
   };
 
   const getStakedTokens = async () => {
-    if (walletConnection.contracts[smartContract]) {
+    if (walletConnection.contracts[smartContract] && wallet.account) {
       const result = await walletConnection.contracts[stakingSmartContract].userInfo(0, wallet.account).call();
       const poolStaking = bnToNumber(result[poolId]).toString();
 
@@ -87,6 +108,8 @@ const PoolCardContainer = ({
   };
 
   const onEnable = async () => {
+    if (!wallet.account) return;
+
     setLoadingApprove(true);
 
     const result = await walletConnection.contracts[smartContract].approve(walletConnection.contracts[stakingSmartContract].address, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({ from: wallet.account }).on('receipt', () => {
@@ -99,6 +122,8 @@ const PoolCardContainer = ({
   };
 
   const onStake = async (amount) => {
+    if (!wallet.account) return;
+
     setLoadingStaking(true);
 
     const result = await walletConnection.contracts[stakingSmartContract].enterStaking(numberToBN(amount).toString()).send({
@@ -115,6 +140,8 @@ const PoolCardContainer = ({
   };
 
   const onUnstake = async (amount) => {
+    if (!wallet.account) return;
+
     setLoadingUnstaking(true);
 
     const result = await walletConnection.contracts[stakingSmartContract].leaveStaking(numberToBN(amount).toString()).send({
@@ -131,7 +158,7 @@ const PoolCardContainer = ({
   };
 
   const updateStakedTokenBalance = async () => {
-    if (!walletConnection.contracts[smartContract]) return;
+    if (!walletConnection.contracts[smartContract] || !wallet.account) return;
 
     try {
       const result = await walletConnection.contracts[smartContract].balanceOf(wallet.account).call();
@@ -143,7 +170,8 @@ const PoolCardContainer = ({
   };
 
   const updateTotalStaked = async () => {
-    if (!walletConnection.contracts[smartContract]) return;
+    if (!walletConnection.contracts[smartContract] || !wallet.account) return;
+
     setLoadingTotalStaked(true);
 
     try {
@@ -158,6 +186,8 @@ const PoolCardContainer = ({
   };
 
   const onHarvest = async () => {
+    if (!wallet.account) return;
+
     setLoadingCollect(true);
 
     await walletConnection.contracts[stakingSmartContract].leaveStaking('0').send({
@@ -175,6 +205,8 @@ const PoolCardContainer = ({
   };
 
   const onCompound = async () => {
+    if (!wallet.account) return;
+
     setLoadingCollect(true);
 
     await walletConnection.contracts[stakingSmartContract].enterStaking(numberToBN(earnedToken.earnings).toString()).send({
@@ -228,23 +260,33 @@ const PoolCardContainer = ({
   };
 
   const [stakedToken, setStakedToken] = useState({
-    earnings: 0.0,
+    ...INITIAL_STAKED_TOKEN,
     disabled: !approved,
-    usdEarnings: '~0.000',
-    empty: true,
     token,
-    staked: true,
     onTokenBalanceClick: displayStakeModal,
   });
   const [earnedToken, setEarnedToken] = useState({
-    earnings: 0.0,
+    ...INITIAL_EARNED_TOKEN,
     disabled: !approved,
-    usdEarnings: '~0.000',
-    empty: false,
     token,
-    staked: false,
     onTokenBalanceClick: displayCollectModal,
   });
+
+  const resetAmounts = () => {
+    setApproved(false);
+    setStakedToken({
+      ...INITIAL_STAKED_TOKEN,
+      disabled: true,
+      token,
+      onTokenBalanceClick: displayStakeModal,
+    });
+    setEarnedToken({
+      ...INITIAL_EARNED_TOKEN,
+      disabled: true,
+      token,
+      onTokenBalanceClick: displayCollectModal,
+    });
+  };
 
   useEffect(async () => {
     if (wallet.networkId) {
@@ -254,18 +296,39 @@ const PoolCardContainer = ({
         await getEarnedTokens();
         await getStakedTokens();
         await updateStakedTokenBalance();
+      } else {
+        resetAmounts();
       }
     }
   }, [wallet.networkId, wallet.account]);
 
+  const stopEarningsPolling = () => {
+    clearInterval(earningsInterval);
+    setEarningsInterval(null);
+  };
+
+  const startEarningsPolling = () => {
+    setEarningsInterval(setInterval(async () => {
+      await getEarnedTokens();
+    }, EARNED_TOKENS_REFRESH_TIME));
+  };
+
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (wallet.networkId && wallet.account) {
-        await getEarnedTokens();
+    if (wallet.account) {
+      if (polledAccount !== wallet.account) {
+        setPolledAccount(wallet.account);
+
+        if (earningsInterval) {
+          stopEarningsPolling();
+        }
+        startEarningsPolling();
+      } else if (!earningsInterval) {
+        startEarningsPolling();
       }
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
+    } else {
+      stopEarningsPolling();
+    }
+  }, [wallet.account]);
 
   return (
     <>
@@ -323,7 +386,7 @@ const PoolCardContainer = ({
         show={showDetailsModal}
         totalStaked={totalStaked}
         loading={loadingTotalStaked}
-        contractUrl={`https://${process.env.NEXT_PUBLIC_APP_ENV !== 'production' ? 'testnet.' : ''}bscscan.com/address/${walletConnection.contracts[stakingSmartContract]?.address}`}
+        contractUrl={generateAddressUrl(walletConnection.contracts[stakingSmartContract]?.address)}
         onHide={hideDetailsModal}
         token={token}
       />

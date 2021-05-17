@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
+
+import Button from 'components/atoms/button';
 
 export const Container = styled.div`
   display: flex;
