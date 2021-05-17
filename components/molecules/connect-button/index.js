@@ -62,8 +62,10 @@ const ConnectButton = ({ wallet, walletActions, onClick }) => {
         if (balanceInterval) {
           stopBalancePolling();
         }
+        updateMangoBalance();
         startBalancePolling();
       } else if (!balanceInterval) {
+        updateMangoBalance();
         startBalancePolling();
       }
     } else {
