@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconContext } from 'react-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Button from 'components/atoms/button';
-import CloseButton from 'components/atoms/close-button';
 
-import Modal from 'components/molecules/modal';
+import SimpleModal from 'components/molecules/simple-modal';
 
 import {
   bnToNumber,
@@ -19,27 +17,8 @@ import * as Styles from './styles';
 const DetailsModal = ({
   contractUrl, totalStaked, show, onHide, token, loading,
 }) => (
-  <Modal
-    centered
-    show={show}
-    onHide={onHide}
-  >
-    <Modal.Header closeButton={false}>
-      <Modal.Title as="h5">
-        Details
-      </Modal.Title>
-      <CloseButton onClick={onHide} />
-    </Modal.Header>
-    <Modal.Body as={Styles.Body}>
-      <div className="d-flex flex-direction-row justify-content-between">
-        <Styles.Label>Total staked</Styles.Label>
-        <Styles.Value>
-          {loading ? <CircularProgress size={22} /> : `${bnToNumber(totalStaked).toFormat()} ${token}`}
-        </Styles.Value>
-      </div>
-    </Modal.Body>
-    <Modal.Footer as={Styles.ModalFooter}>
-      {contractUrl && (
+  <SimpleModal
+    footer={contractUrl && (
       <Button
         flat
         fixedWidth={164}
@@ -50,9 +29,18 @@ const DetailsModal = ({
       >
         View contract
       </Button>
-      )}
-    </Modal.Footer>
-  </Modal>
+    )}
+    show={show}
+    title="Details"
+    onHide={onHide}
+  >
+    <div className="d-flex flex-direction-row justify-content-between">
+      <Styles.Label>Total staked</Styles.Label>
+      <Styles.Value>
+        {loading ? <CircularProgress size={22} /> : `${bnToNumber(totalStaked).toFormat()} ${token}`}
+      </Styles.Value>
+    </div>
+  </SimpleModal>
 );
 
 DetailsModal.propTypes = {

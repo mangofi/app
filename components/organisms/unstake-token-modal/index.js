@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import Button from 'components/atoms/button';
 import Input from 'components/atoms/input';
-import CloseButton from 'components/atoms/close-button';
 
-import Modal from 'components/molecules/modal';
+import SimpleModal from 'components/molecules/simple-modal';
 import MangoSlider from 'components/molecules/mango-slider';
 
 import { div, bnToNumber, perc } from 'utils/number';
@@ -75,58 +74,50 @@ const UnstakeTokenModal = ({
   }, [show]);
 
   return (
-    <Modal
-      centered
+    <SimpleModal
+      footer={(
+        <>
+          <div />
+          <div>
+            <Button className="mr-1" grayedOut flat onClick={onHide}>
+              Cancel
+            </Button>
+            &nbsp;
+            <Button disabled={amountToUnstake == 0} flat fixedWidth={138} loading={loading} onClick={onUnstakeButtonClick}>
+              Unstake
+            </Button>
+          </div>
+        </>
+      )}
       show={show}
+      title={`Unstake ${token}`}
       onHide={onHide}
     >
-      <Modal.Header closeButton={false}>
-        <Modal.Title as="h5">
-          Unstake
+      <Styles.Figure src={`/img/stake/${token.toLowerCase()}.svg`} />
+      <Styles.BalanceContainer>
+        <Styles.Balance>Balance</Styles.Balance>
+        <span>
+          {balanceToNumber.toFormat()}
           {' '}
           {token}
-        </Modal.Title>
-        <CloseButton onClick={onHide} />
-      </Modal.Header>
-      <Modal.Body as={Styles.Body}>
-        <Styles.Figure src={`/img/stake/${token.toLowerCase()}.svg`} />
-        <Styles.BalanceContainer>
-          <Styles.Balance>Balance</Styles.Balance>
-          <span>
-            {balanceToNumber.toFormat()}
-            {' '}
-            {token}
-          </span>
-        </Styles.BalanceContainer>
-        <div className="mt-2">
-          <Input
-            isInvalid={invalidAmount}
-            value={amountToUnstake}
-            onChange={onInputChange}
-            onEnterPressed={onUnstakeButtonClick}
-            placeholder={0}
-            suffix={token}
-            size="lg"
-          />
-        </div>
-        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} modifiedValue={sliderPercentage} />
-        <div className="mt-2">
-          Your earnings and staked balance will be withdrawn into your wallet. You will need to stake again in order to keep earning.
-        </div>
-      </Modal.Body>
-      <Modal.Footer as={Styles.ModalFooter}>
-        <div />
-        <div>
-          <Button className="mr-1" grayedOut flat onClick={onHide}>
-            Cancel
-          </Button>
-          &nbsp;
-          <Button disabled={amountToUnstake == 0} flat fixedWidth={138} loading={loading} onClick={onUnstakeButtonClick}>
-            Unstake
-          </Button>
-        </div>
-      </Modal.Footer>
-    </Modal>
+        </span>
+      </Styles.BalanceContainer>
+      <div className="mt-2">
+        <Input
+          isInvalid={invalidAmount}
+          value={amountToUnstake}
+          onChange={onInputChange}
+          onEnterPressed={onUnstakeButtonClick}
+          placeholder={0}
+          suffix={token}
+          size="lg"
+        />
+      </div>
+      <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} modifiedValue={sliderPercentage} />
+      <div className="mt-2">
+        Your earnings and staked balance will be withdrawn into your wallet. You will need to stake again in order to keep earning.
+      </div>
+    </SimpleModal>
   );
 };
 

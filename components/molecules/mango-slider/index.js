@@ -12,7 +12,7 @@ const MangoSlider = ({ className, onChange, modifiedValue }) => {
   };
 
   useEffect(() => {
-    setValue(modifiedValue);
+    setValue(modifiedValue.toString() === 'NaN' ? 0 : modifiedValue);
   }, [modifiedValue]);
 
   const renderMangoHandle = (props) => (

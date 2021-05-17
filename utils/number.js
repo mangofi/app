@@ -2,6 +2,9 @@ import { formatMoney, formatNumber } from 'accounting-js';
 import { fromWei, toBN } from 'web3-utils';
 import BigNumber from 'bignumber.js';
 
+const DEFAULT_DECIMALS = 18;
+const DEFAULT_PRECISION = 6;
+
 BigNumber.config({
   EXPONENTIAL_AT: 24,
   FORMAT: {
@@ -23,9 +26,6 @@ BigNumber.config({
     suffix: '',
   },
 });
-
-const DEFAULT_DECIMALS = 18;
-const DEFAULT_PRECISION = 8;
 
 export {
   toBN,

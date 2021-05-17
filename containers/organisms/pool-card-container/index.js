@@ -323,7 +323,7 @@ const PoolCardContainer = ({
         show={showDetailsModal}
         totalStaked={totalStaked}
         loading={loadingTotalStaked}
-        contractUrl={`https://testnet.bscscan.com/address/${walletConnection.contracts[stakingSmartContract]?.address}`}
+        contractUrl={`https://${process.env.NEXT_PUBLIC_APP_ENV !== 'production' ? 'testnet.' : ''}bscscan.com/address/${walletConnection.contracts[stakingSmartContract]?.address}`}
         onHide={hideDetailsModal}
         token={token}
       />

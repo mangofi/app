@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import Button from 'components/atoms/button';
 import Switch from 'components/atoms/switch';
-import CloseButton from 'components/atoms/close-button';
 
-import Modal from 'components/molecules/modal';
+import SimpleModal from 'components/molecules/simple-modal';
 import Coin from 'components/molecules/coin';
 
 import {
@@ -46,66 +45,58 @@ const CollectModal = ({
   }, [initialEarnings]);
 
   return (
-    <Modal
-      centered
+    <SimpleModal
+      footer={(
+        <>
+          <div />
+          <div>
+            <Button className="mr-1" grayedOut flat onClick={onHide}>
+              Cancel
+            </Button>
+            &nbsp;
+            <Button
+              flat
+              loading={loading}
+              fixedWidth={138}
+              onClick={!loading && onCompoundHarvestClick}
+            >
+              {selectedOption}
+            </Button>
+          </div>
+        </>
+      )}
       show={show}
+      title={`Collect ${token}`}
       onHide={onHide}
     >
-      <Modal.Header closeButton={false}>
-        <Modal.Title as="h5">
-          Collect
-          {' '}
-          {token}
-        </Modal.Title>
-        <CloseButton onClick={onHide} />
-      </Modal.Header>
-      <Modal.Body as={Styles.Body}>
-        <Switch
-          options={OPTIONS}
-          selectedIndex={OPTIONS.indexOf(selectedOption)}
-          onChange={setSwitchOption}
-        />
-        <div className="d-flex flex-direction-row align-items-center mt-3">
-          <Coin name={token} small />
-          <Styles.Earnings className="ml-2">
-            {bnToNumber(earnings).toFormat()}
-          </Styles.Earnings>
-        </div>
-        {selectedOption === COMPOUND ? (
-          <>
-            <Styles.Text className="mt-3">
-              Compound adds your earned tokens into your staked balance.
-            </Styles.Text>
-            <Styles.Text>
-              Your new staked balance will be
-              {' '}
-              <strong>{newStakedBalance.toFormat()}</strong>
-            </Styles.Text>
-          </>
-        ) : (
+      <Switch
+        options={OPTIONS}
+        selectedIndex={OPTIONS.indexOf(selectedOption)}
+        onChange={setSwitchOption}
+      />
+      <div className="d-flex flex-direction-row align-items-center mt-3">
+        <Coin name={token} small />
+        <Styles.Earnings className="ml-2">
+          {bnToNumber(earnings).toFormat()}
+        </Styles.Earnings>
+      </div>
+      {selectedOption === COMPOUND ? (
+        <>
           <Styles.Text className="mt-3">
-            Harvest adds your earned tokens into your wallet.
+            Compound adds your earned tokens into your staked balance.
           </Styles.Text>
-        )}
-      </Modal.Body>
-      <Modal.Footer as={Styles.ModalFooter}>
-        <div />
-        <div>
-          <Button className="mr-1" grayedOut flat onClick={onHide}>
-            Cancel
-          </Button>
-          &nbsp;
-          <Button
-            flat
-            loading={loading}
-            fixedWidth={138}
-            onClick={!loading && onCompoundHarvestClick}
-          >
-            {selectedOption}
-          </Button>
-        </div>
-      </Modal.Footer>
-    </Modal>
+          <Styles.Text>
+            Your new staked balance will be
+            {' '}
+            <strong>{newStakedBalance.toFormat()}</strong>
+          </Styles.Text>
+        </>
+      ) : (
+        <Styles.Text className="mt-3">
+          Harvest adds your earned tokens into your wallet.
+        </Styles.Text>
+      )}
+    </SimpleModal>
   );
 };
 

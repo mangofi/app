@@ -25,7 +25,9 @@ function ConnectButton({ wallet, walletActions }) {
 
   const updateMangoBalance = async () => {
     if (account && walletConnection.contracts[MANGO_TOKEN]) {
-      const result = await walletConnection.contracts[MANGO_TOKEN].balanceOf(wallet.account).call();
+      const result = await walletConnection.contracts[MANGO_TOKEN].balanceOf(wallet.account).call().catch((e) => {
+        console.error(e);
+      });
 
       walletActions.setBalance(MNGO, result.toString());
     }

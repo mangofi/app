@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import Button from 'components/atoms/button';
 import Input from 'components/atoms/input';
-import CloseButton from 'components/atoms/close-button';
 
-import Modal from 'components/molecules/modal';
+import SimpleModal from 'components/molecules/simple-modal';
 import MangoSlider from 'components/molecules/mango-slider';
 
 import {
@@ -78,18 +77,39 @@ const StakeTokenModal = ({
   }, [show]);
 
   return (
-    <Modal
-      centered
+    <SimpleModal
+      footer={(
+        <>
+          {hasBalance ? (
+            <Button flat fixedWidth={140} secondary onClick={onBuy}>
+              Buy
+              {' '}
+              {token}
+            </Button>
+          ) : <div />}
+          <div>
+            <Button className="mr-1" grayedOut flat onClick={onHide}>
+              Cancel
+            </Button>
+            {hasBalance ? (
+              <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={onStakeButtonClick}>
+                Stake
+              </Button>
+            ) : (
+              <Button flat fixedWidth={138} onClick={onBuy}>
+                Buy
+                {' '}
+                {token}
+              </Button>
+            )}
+          </div>
+        </>
+      )}
       show={show}
+      title={hasBalance ? `Stake ${token}` : `${token} required`}
       onHide={onHide}
     >
-      <Modal.Header closeButton={false}>
-        <Modal.Title as="h5">
-          {hasBalance ? `Stake ${token}` : `${token} required`}
-        </Modal.Title>
-        <CloseButton onClick={onHide} />
-      </Modal.Header>
-      <Modal.Body as={Styles.Body}>
+      <>
         <Styles.Figure src={`/img/stake/${token.toLowerCase()}.svg`} />
         <Styles.BalanceContainer>
           <Styles.Balance>Balance</Styles.Balance>
@@ -137,33 +157,8 @@ const StakeTokenModal = ({
           {' '}
           isn’t in another pool or farm.
         </div>
-      </Modal.Body>
-      <Modal.Footer as={Styles.ModalFooter}>
-        {hasBalance ? (
-          <Button flat fixedWidth={140} secondary onClick={onBuy}>
-            Buy
-            {' '}
-            {token}
-          </Button>
-        ) : <div />}
-        <div>
-          <Button className="mr-1" grayedOut flat onClick={onHide}>
-            Cancel
-          </Button>
-          {hasBalance ? (
-            <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={onStakeButtonClick}>
-              Stake
-            </Button>
-          ) : (
-            <Button flat fixedWidth={138} onClick={onBuy}>
-              Buy
-              {' '}
-              {token}
-            </Button>
-          )}
-        </div>
-      </Modal.Footer>
-    </Modal>
+      </>
+    </SimpleModal>
   );
 };
 
