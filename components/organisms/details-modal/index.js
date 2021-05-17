@@ -17,7 +17,7 @@ import {
 import * as Styles from './styles';
 
 const DetailsModal = ({
-  onViewContract, totalStaked, show, onHide, token, loading,
+  contractUrl, totalStaked, show, onHide, token, loading,
 }) => (
   <Modal
     centered
@@ -39,15 +39,18 @@ const DetailsModal = ({
       </div>
     </Modal.Body>
     <Modal.Footer as={Styles.ModalFooter}>
+      {contractUrl && (
       <Button
         flat
         fixedWidth={164}
         leftIcon={<FontAwesomeIcon className="mr-1" icon={faExternalLinkAlt} fixedWidth />}
         secondary
-        onClick={onViewContract}
+        href={contractUrl}
+        target="new"
       >
         View contract
       </Button>
+      )}
     </Modal.Footer>
   </Modal>
 );
@@ -56,7 +59,7 @@ DetailsModal.propTypes = {
   show: PropTypes.bool,
   loading: PropTypes.bool,
   onHide: PropTypes.func,
-  onViewContract: PropTypes.func,
+  contractUrl: PropTypes.string,
   totalStaked: PropTypes.string,
   token: PropTypes.string.isRequired,
 };
@@ -65,7 +68,7 @@ DetailsModal.defaultProps = {
   show: false,
   loading: false,
   onHide: () => {},
-  onViewContract: () => {},
+  contractUrl: null,
   totalStaked: '0',
 };
 
