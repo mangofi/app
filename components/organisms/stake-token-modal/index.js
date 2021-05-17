@@ -141,7 +141,9 @@ const StakeTokenModal = ({
       <Modal.Footer as={Styles.ModalFooter}>
         {hasBalance ? (
           <Button flat fixedWidth={140} secondary onClick={onBuy}>
-            Buy Mango
+            Buy
+            {' '}
+            {token}
           </Button>
         ) : <div />}
         <div>
