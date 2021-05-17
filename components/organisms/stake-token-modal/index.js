@@ -21,6 +21,9 @@ const StakeTokenModal = ({
   const [invalidAmount, setInvalidAmount] = useState(false);
   const [sliderPercentage, setSliderPercentage] = useState(0);
 
+  const balanceToNumber = useMemo(() => bnToNumber(balance), [balance]);
+  const hasBalance = useMemo(() => balanceToNumber.gt(0), [balanceToNumber]);
+
   const sanitizeAmount = (value) => {
     const numericValue = parseFloat(value);
 
@@ -33,8 +36,6 @@ const StakeTokenModal = ({
 
     return amountToStake;
   };
-
-  const balanceToNumber = useMemo(() => bnToNumber(balance), [balance]);
 
   const onStakeClick = () => {
     if (loading) return;
@@ -84,9 +85,7 @@ const StakeTokenModal = ({
     >
       <Modal.Header closeButton={false}>
         <Modal.Title as="h5">
-          Stake
-          {' '}
-          {token}
+          {hasBalance ? `Stake ${token}` : `${token} required`}
         </Modal.Title>
         <CloseButton onClick={onHide} />
       </Modal.Header>
@@ -94,24 +93,36 @@ const StakeTokenModal = ({
         <Styles.Figure src={`/img/stake/${token.toLowerCase()}.svg`} />
         <Styles.BalanceContainer>
           <Styles.Balance>Balance</Styles.Balance>
-          <span>
-            {balanceToNumber.toFormat()}
-            {' '}
-            {token}
-          </span>
+          {hasBalance ? (
+            <span>
+              {balanceToNumber.toFormat()}
+              {' '}
+              {token}
+            </span>
+          ) : (
+            <Styles.ErrorText>
+              Insufficient
+              {' '}
+              {token}
+            </Styles.ErrorText>
+          )}
         </Styles.BalanceContainer>
-        <div className="mt-2">
-          <Input
-            isInvalid={invalidAmount}
-            value={amountToStake}
-            onChange={onInputChange}
-            onEnterPressed={onStakeButtonClick}
-            placeholder={0}
-            suffix={token}
-            size="lg"
-          />
-        </div>
-        <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} modifiedValue={sliderPercentage} />
+        {hasBalance && (
+          <>
+            <div className="mt-2">
+              <Input
+                isInvalid={invalidAmount}
+                value={amountToStake}
+                onChange={onInputChange}
+                onEnterPressed={onStakeButtonClick}
+                placeholder={0}
+                suffix={token}
+                size="lg"
+              />
+            </div>
+            <MangoSlider className="mt-4 mb-2" onChange={onSliderChange} modifiedValue={sliderPercentage} />
+          </>
+        )}
         <div className="mt-2">
           You will need
           {' '}
@@ -128,17 +139,26 @@ const StakeTokenModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer as={Styles.ModalFooter}>
-        <Button flat fixedWidth={140} secondary onClick={onBuy}>
-          Buy Mango
-        </Button>
+        {hasBalance ? (
+          <Button flat fixedWidth={140} secondary onClick={onBuy}>
+            Buy Mango
+          </Button>
+        ) : <div />}
         <div>
           <Button className="mr-1" grayedOut flat onClick={onHide}>
             Cancel
           </Button>
-          &nbsp;
-          <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={onStakeButtonClick}>
-            Stake
-          </Button>
+          {hasBalance ? (
+            <Button disabled={amountToStake == 0} loading={loading} flat fixedWidth={138} onClick={onStakeButtonClick}>
+              Stake
+            </Button>
+          ) : (
+            <Button flat fixedWidth={138} onClick={onBuy}>
+              Buy
+              {' '}
+              {token}
+            </Button>
+          )}
         </div>
       </Modal.Footer>
     </Modal>

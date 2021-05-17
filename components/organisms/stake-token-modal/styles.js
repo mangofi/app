@@ -33,3 +33,7 @@ export const Balance = styled.span`
   color: var(--black400);
   font-weight: 500;
 `;
+
+export const ErrorText = styled.span`
+  color: var(--danger500);
+`;

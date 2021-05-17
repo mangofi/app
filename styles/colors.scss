@@ -18,6 +18,8 @@ $primary300: #FFB566;
 $primary200: #FFD399;
 $primary100: #FFF4E0;
 
+$danger500: #FF355D;
+
 :root {
   --black900: #{$black900};
   --black800: #{$black800};
@@ -38,4 +40,6 @@ $primary100: #FFF4E0;
   --primary300: #{$primary300};
   --primary200: #{$primary200};
   --primary100: #{$primary100};
+  
+  --danger500: #{$danger500};
 }
