@@ -112,8 +112,13 @@ const PoolCardContainer = ({
 
     setLoadingApprove(true);
 
-    const result = await walletConnection.contracts[smartContract].approve(walletConnection.contracts[stakingSmartContract].address, '115792089237316195423570985008687907853269984665640564039457584007913129639935').send({ from: wallet.account }).on('receipt', () => {
-      setApproved(result.status);
+    const result = await walletConnection.contracts[smartContract].approve(
+      walletConnection.contracts[stakingSmartContract].address,
+      '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+    ).send({
+      from: wallet.account,
+    }).on('receipt', () => {
+      setApproved(Boolean(result.status));
     }).catch((e) => {
       console.error(e);
     });

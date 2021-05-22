@@ -92,7 +92,7 @@ const CollectModal = ({
           </Styles.Text>
         </>
       ) : (
-        <Styles.Text className="mt-3">
+        <Styles.Text className="mt-3 mb-4">
           Harvest adds your earned tokens into your wallet.
         </Styles.Text>
       )}
