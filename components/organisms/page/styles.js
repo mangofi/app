@@ -5,4 +5,5 @@ export const Content = styled.div`
   padding-right: 25px;
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;

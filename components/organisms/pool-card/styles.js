@@ -28,6 +28,7 @@ export const StyledCard = styled(Card)`
   animation: ${colorMutation} 3s linear infinite;
   border-width: 2px;
   transition: border-color 2s ease;
+  width: 423px;
   
   ${({ working }) => (working ? null : 'border-color: var(--black700) !important;')}
 `;

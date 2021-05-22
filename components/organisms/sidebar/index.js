@@ -52,7 +52,7 @@ const Sidebar = ({ wallet, walletActions, currentPage }) => {
           Home
         </SidebarMenuItem>
         <SidebarMenuItem icon="👛" href="#" active={currentPage === '#'} disabled>
-          Exchange
+          MSwap
         </SidebarMenuItem>
         <SidebarMenuItem icon="🌴" href="/pools" active={currentPage === '/pools'}>
           Pools
