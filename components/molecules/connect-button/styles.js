@@ -9,7 +9,7 @@ export const Container = styled.div`
 
 export const Address = styled.button`
   align-items: center;
-  background-color: #ffffff;
+  background-color: var(--black700);
   border: none;
   border-radius: 39px;
   box-shadow: 0px 2px 4px 0px #60617029, 0px 0px 1px 0px #28293D0A;
@@ -56,4 +56,12 @@ export const AccountInfo = styled.div`
 
 export const AccountNumber = styled.div`
   font-size: 14px;
+`;
+
+export const Balance = styled.div`
+  color: #fff;
+  
+  small {
+    color: var(--black500);
+  }
 `;

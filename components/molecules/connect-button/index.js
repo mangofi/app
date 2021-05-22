@@ -84,11 +84,11 @@ const ConnectButton = ({ wallet, walletActions, onClick }) => {
               …
               {account.slice(-4)}
             </Styles.AccountNumber>
-            <div>
+            <Styles.Balance>
               <strong>{balances[MNGO] ? bnToNumber(balances[MNGO]).toFormat() : '---'}</strong>
               {' '}
               <small>MNGO</small>
-            </div>
+            </Styles.Balance>
           </Styles.AccountInfo>
         </Styles.Address>
       ) : (
