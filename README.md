@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+MangoFi App
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/844a95bc-f091-44f7-a4b1-8b2b9070678d/deploy-status)](https://app.netlify.com/sites/mangofi-app/deploys)
 
 ## Getting Started
 

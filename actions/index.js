@@ -1,5 +1,5 @@
-import wallet from './wallet'
+import * as wallet from './wallet';
 
 export default {
-  wallet
-}
+  wallet,
+};

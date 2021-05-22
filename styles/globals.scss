@@ -1,0 +1,77 @@
+@import "./fonts.scss";
+@import "./colors.scss";
+@import "~bootstrap/scss/bootstrap";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "CircularSTD", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--black900);
+  color: #FFF;
+  font-size: 16px;
+  height: 100%;
+}
+
+#__next {
+  height: 100%;
+}
+
+body {
+  background: url('/img/bg.svg') top left / cover;
+}
+
+h1 {
+  
+}
+
+h2 {
+  
+}
+
+h3 {
+  
+}
+
+h4 {
+  color: #FFF;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -0.35px;
+  line-height: 37px;
+}
+
+h5 {
+  
+}
+
+h6 {
+  
+}
+
+a:hover {
+  color: var(--primary500);
+  text-decoration: none;
+}
+
+p {
+  line-height: 28px
+}
+
+.spinner {
+    animation: spin infinite 1s linear;
+  }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

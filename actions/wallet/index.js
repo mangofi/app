@@ -1,17 +1,56 @@
-import {
-  SET_ACCOUNT
-} from "./action-types"
+import * as actions from './action-types';
 
 export function setAccount(address) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
-      type: SET_ACCOUNT,
+      type: actions.SET_ACCOUNT,
       payload: {
         account: address,
-        signedIn: !!address
-      }
-    })
-  }
+      },
+    });
+  };
 }
 
-export default {setAccount}
+export function setBalances(balances) {
+  return (dispatch) => {
+    dispatch({
+      type: actions.SET_BALANCES,
+      payload: balances,
+    });
+  };
+}
+
+export function setNetworkId(networkId) {
+  return (dispatch) => {
+    dispatch({
+      type: actions.SET_NETWORK_ID,
+      payload: networkId,
+    });
+  };
+}
+
+export function setBalance(symbol, balance) {
+  return (dispatch) => {
+    dispatch({
+      type: actions.UPDATE_BALANCE,
+      payload: {
+        symbol,
+        balance,
+      },
+    });
+  };
+}
+
+export function logOut() {
+  return (dispatch) => {
+    dispatch({
+      type: actions.SET_ACCOUNT,
+      payload: {
+        account: null,
+      },
+    });
+    setBalances({})(dispatch);
+  };
+}
+
+export default null;

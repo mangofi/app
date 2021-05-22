@@ -1,0 +1,45 @@
+$black900: #0D1217;
+$black800: #1A2129;
+$black700: #313C49;
+$black600: #4C5E73;
+$black500: #8093A8;
+$black400: #B7C3D1;
+$black300: #E4EAF0;
+$black200: #F2F5F8;
+$black100: #F9FAFC;
+
+$primary900: #7A1400;
+$primary800: #932100;
+$primary700: #B73300;
+$primary600: #DB4A00;
+$primary500: #FF6600;
+$primary400: #FF973F;
+$primary300: #FFB566;
+$primary200: #FFD399;
+$primary100: #FFF4E0;
+
+$danger500: #FF355D;
+
+:root {
+  --black900: #{$black900};
+  --black800: #{$black800};
+  --black700: #{$black700};
+  --black600: #{$black600};
+  --black500: #{$black500};
+  --black400: #{$black400};
+  --black300: #{$black300};
+  --black200: #{$black200};
+  --black100: #{$black100};
+
+  --primary900: #{$primary900};
+  --primary800: #{$primary800};
+  --primary700: #{$primary700};
+  --primary600: #{$primary600};
+  --primary500: #{$primary500};
+  --primary400: #{$primary400};
+  --primary300: #{$primary300};
+  --primary200: #{$primary200};
+  --primary100: #{$primary100};
+  
+  --danger500: #{$danger500};
+}
