@@ -13,7 +13,10 @@
     "ganache:dev": "ganache-cli -m 'federal infant angry wrist polar million submit bacon machine affair blur feel'",
     "console": "truffle console",
     "console:bsctestnet": "truffle console --network bscTestnet",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docker:build": "docker-compose build",
+    "docker:start": "docker-compose up --remove-orphans",
+    "docker:setup": "docker-compose rm -v -f && docker-compose build && docker-compose up --remove-orphans"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",

@@ -1,32 +1,49 @@
-MangoFi App
+# MangoFi App
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/844a95bc-f091-44f7-a4b1-8b2b9070678d/deploy-status)](https://app.netlify.com/sites/mangofi-app/deploys)
 
-## Getting Started
+## Requirements
 
-First, run the development server:
+- Node version 14 (preferably)
+- Docker (optional)
+- Ganache (for local development)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### With Docker (recommended)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Run `yarn install` and make sure all packages install correctly
+- `yarn docker:setup` cleans, builds and runs a container with the app running on port 3000
+- Visit [http://localhost:3000](http://localhost:3000) to access the app
 
-## Learn More
+### Manually
 
-To learn more about Next.js, take a look at the following resources:
+- Run `yarn install` and make sure all packages install correctly
+- Run `npm rebuild node-sass` to avoid `node-sass` errors
+- Run `yarn dev` to start web server
+- Visit [http://localhost:3000](http://localhost:3000) to access the app
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- `yarn dev`: Starts web server at [http://localhost:3000](http://localhost:3000) for local development
+- `yarn build`: Perform a NextJS build, creating a static site, production-ready version of the app
+- `yarn start`: Starts web server at [http://localhost:3000](http://localhost:3000) using the files from the NextJS build result of the app
+- `yarn compile`: Executes a Truffle compilation of the contracts inside `./contracts` directory
+- `yarn deploy`: Deploys the contracts in `migrations/2_deploy_contracts.js` into the Ganache development server
+- `yarn deploy:ropsten`: Deploys the contracts in `migrations/2_deploy_contracts.js` into the Ropsten network
+- `yarn deploy:bsctestnet`: Deploys the contracts in `migrations/2_deploy_contracts.js` into the Binance Smart Chain Testnet (currently suffering from a lot of timeouts)
+- `yarn ganache:dev`: Runs a Ganache dev server
+- `yarn console`: Opens Truffle console connected to local Ganache development server
+- `yarn console:bsctestnet`: Opens Truffle console connected to Binance Smart Chain Testnet
+- `yarn docker:build`: Builds app using `Dockerfile`
+- `yarn docker:start`: Runs previously built Docker container
+- `yarn docker:setup`: Cleans, builds and runs the app Docker container
 
-## Deploy on Vercel
+## Troubleshooting
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `node-sass` errors
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Make sure you have node version 14 installed
+- Stop web server (if running)
+- Run `npm rebuild node-sass`
+- Run web server again
