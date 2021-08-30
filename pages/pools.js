@@ -8,7 +8,7 @@ import PoolCardContainer from 'containers/organisms/pool-card-container';
 
 import { MANGO_TOKEN, MANGO_TREE } from 'lib/smart-contracts';
 
-const Home = () => (
+const Pools = () => (
   <Page currentPage="/pools">
     <h4 style={{ position: 'relative' }}>
       Pools 🌴
@@ -31,4 +31,4 @@ const Home = () => (
   </Page>
 );
 
-export default Home;
+export default Pools;
