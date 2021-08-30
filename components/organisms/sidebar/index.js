@@ -51,6 +51,9 @@ const Sidebar = ({ wallet, walletActions, currentPage }) => {
         <SidebarMenuItem icon="🏡" href="/" active={currentPage === '/'}>
           Home
         </SidebarMenuItem>
+        <SidebarMenuItem icon="🧳" href="/portfolio" active={currentPage === '/portfolio'}>
+          Portfolio
+        </SidebarMenuItem>
         <SidebarMenuItem icon="👛" href="#" active={currentPage === '#'} disabled>
           Exchange
         </SidebarMenuItem>
