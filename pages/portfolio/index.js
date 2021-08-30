@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Page from 'components/organisms/page';
 
 import EthBalance from './containers/eth-balance';
+import BnbBalance from './containers/bnb-balance';
 
 const Portfolio = () => {
   const [bscBalance, setBscBalance] = useState(null);
@@ -17,6 +18,7 @@ const Portfolio = () => {
         Take a look at your portfolio
       </div>
       <EthBalance />
+      <BnbBalance />
     </Page>
   );
 };

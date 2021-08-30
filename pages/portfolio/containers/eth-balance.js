@@ -7,13 +7,13 @@ import connector from 'lib/connector';
 
 import { asToken } from 'utils/number';
 
-const EtherscanApi = Etherscan.init(process.env.ETHERSCAN_API_KEY);
+const EtherscanApi = Etherscan.init(process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY);
 
 const EthBalance = ({ wallet }) => {
   const [ethBalance, setEthBalance] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const loadBalances = useCallback(() => {
+  const loadBalance = useCallback(() => {
     setLoading(true);
 
     EtherscanApi.account.balance(wallet.account).then((data) => {
@@ -34,7 +34,7 @@ const EthBalance = ({ wallet }) => {
 
   useEffect(() => {
     if (wallet.account) {
-      loadBalances();
+      loadBalance();
     }
   }, [wallet.account]);
 
