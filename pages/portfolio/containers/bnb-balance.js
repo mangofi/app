@@ -15,11 +15,13 @@ const BnbBalance = ({ wallet }) => {
   const loadBalance = useCallback(() => {
     setLoading(true);
 
-    fetch(`https://api.bscscan.com/api?module=account&action=balance&address=${wallet.account}&tag=latest&apikey=${BSCSCAN_API_KEY}`).then(async (response) => {
-      const json = await response.json();
-
+    fetch(`https://api.bscscan.com/api?module=account&action=balance&address=${wallet.account}&tag=latest&apikey=${BSCSCAN_API_KEY}`).then(async (response) => response.json()).then((data) => {
+      if (data.status === '1') {
+        setBalance(data.result);
+      } else {
+        console.warn('[BnbBalance] Error', data);
+      }
       setLoading(false);
-      setBalance(json.result);
     }).catch((error) => {
       setLoading(false);
       console.warn('Error requesting BSCScan:', error);
