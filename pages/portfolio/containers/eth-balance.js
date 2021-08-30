@@ -17,7 +17,11 @@ const EthBalance = ({ wallet }) => {
     setLoading(true);
 
     EtherscanApi.account.balance(wallet.account).then((data) => {
-      setEthBalance(data.result);
+      if (data.status === '1') {
+        setEthBalance(data.result);
+      } else {
+        console.warn('[EthBalance] Error', data);
+      }
       setLoading(false);
     }).catch(() => {
       setLoading(false);
